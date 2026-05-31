@@ -1,0 +1,4376 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_473e2619f8fcd7428973500281544a1e {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+                .leaflet-container { font-size: 1rem; }
+            </style>
+
+            <style>html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            </style>
+
+            <style>#map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                right:0;
+                left:0;
+                }
+            </style>
+
+            <script>
+                L_NO_TOUCH = false;
+                L_DISABLE_3D = false;
+            </script>
+
+        
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet-locatecontrol/0.66.2/L.Control.Locate.min.css"/>
+</head>
+<body>
+    
+    
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<div id="welcome-modal" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.3); text-align: center; font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 400px; width: 80%;">
+    <h2 style="color: #2E8B57; margin-top: 0; font-size: 24px;">🌿 Welcome to your Milano Map!</h2>
+    <p style="font-size: 16px; color: #333; line-height: 1.5;">Your digital concierge for a sustainable stay in this beautiful city.</p>
+    <div style="background: #f4f4f4; padding: 10px; border-radius: 8px; margin: 15px 0;">
+        <p style="font-size: 14px; color: #555; margin: 0;">Use the layer menu in the top right corner <b>↗️</b> to find free water, circular fashion, zero-waste food, and live events!</p>
+    </div>
+    
+    <p style="font-size: 13px; color: #555; margin-bottom: 8px;">Is this map helpful? Support the projectmil!</p>
+    <a href="https://buymeacoffee.com/tuttozerowaste" target="_blank" onclick="window.parent.gtag('event', 'click_donazione', {'tipo': 'buymeacoffee'});" style="text-decoration: none;">
+        <div style="background-color: #FFDD00; color: #000000; padding: 10px 15px; border-radius: 6px; font-weight: bold; font-size: 14px; margin-bottom: 15px; display: inline-block; width: 90%; border: 1px solid #E5C700;">
+            ☕ Buy me a coffee
+        </div>
+    </a>
+    
+    <p style="font-size: 12px; color: #777; margin-top: 5px;">Help us map Milan! <a href="mailto:simone@tuttozerowaste.com?subject=New%20Place%20Suggestion">Email your suggestions</a>.</p>
+    <button onclick="document.getElementById('welcome-modal').style.display='none'" style="background: #2E8B57; color: white; border: none; padding: 12px 24px; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; width: 100%; transition: background 0.3s;">Start Exploring</button>
+</div>
+    
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-HWQD1B8V1R"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-HWQD1B8V1R');
+
+  document.addEventListener("DOMContentLoaded", function() {
+      var initObserver = setInterval(function() {
+          var popupPane = document.querySelector('.leaflet-popup-pane');
+          if (popupPane) {
+              clearInterval(initObserver); 
+              var observer = new MutationObserver(function(mutations) {
+                  mutations.forEach(function(mutation) {
+                      mutation.addedNodes.forEach(function(node) {
+                          if (node.classList && node.classList.contains('leaflet-popup')) {
+                              var tracker = node.querySelector('.track-pin');
+                              if (tracker) {
+                                  var sendGtag = typeof window.parent.gtag === 'function' ? window.parent.gtag : (typeof gtag === 'function' ? gtag : null);
+                                  if (sendGtag) {
+                                      var actionName = tracker.getAttribute('data-action') || 'view_popup';
+                                      sendGtag('event', actionName, {
+                                          'nome_realta': tracker.getAttribute('data-name'),
+                                          'categoria_business': tracker.getAttribute('data-category')
+                                      });
+                                  }
+                              }
+                          }
+                      });
+                  });
+              });
+              observer.observe(popupPane, { childList: true, subtree: true });
+          }
+      }, 500);
+  });
+</script>
+    
+            <div class="folium-map" id="map_473e2619f8fcd7428973500281544a1e" ></div>
+        
+</body>
+<script>
+    
+    
+            var map_473e2619f8fcd7428973500281544a1e = L.map(
+                "map_473e2619f8fcd7428973500281544a1e",
+                {
+                    center: [60.3913, 5.3221],
+                    crs: L.CRS.EPSG3857,
+                    ...{
+  "zoom": 13,
+  "zoomControl": true,
+  "preferCanvas": false,
+}
+
+                }
+            );
+
+            
+
+        
+    
+            var tile_layer_3e26747366a58ae45bccd7d76af64480 = L.tileLayer(
+                "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png",
+                {
+  "minZoom": 0,
+  "maxZoom": 20,
+  "maxNativeZoom": 20,
+  "noWrap": false,
+  "attribution": "\u0026copy; \u003ca href=\"https://www.openstreetmap.org/copyright\"\u003eOpenStreetMap\u003c/a\u003e contributors \u0026copy; \u003ca href=\"https://carto.com/attributions\"\u003eCARTO\u003c/a\u003e",
+  "subdomains": "abcd",
+  "detectRetina": false,
+  "tms": false,
+  "opacity": 1,
+}
+
+            );
+        
+    
+            tile_layer_3e26747366a58ae45bccd7d76af64480.addTo(map_473e2619f8fcd7428973500281544a1e);
+        
+    
+            var locate_control_36a89e5f8a7b1282232c4ee0dd8bc216 = L.control.locate(
+                {"drawCircle": false, "flyTo": false, "keepCurrentZoomLevel": true, "locateOptions": {"enableHighAccuracy": true, "watch": true}, "position": "topleft", "setView": false}
+            ).addTo(map_473e2619f8fcd7428973500281544a1e);
+            
+                locate_control_36a89e5f8a7b1282232c4ee0dd8bc216.start();
+            
+        
+    
+            var feature_group_01345913cf20e02827bb32dd5b764fd5 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_482af80c3c092c3db3b9102fca6c98ab = L.marker(
+                [60.3975884, 5.3330296],
+                {
+}
+            ).addTo(feature_group_01345913cf20e02827bb32dd5b764fd5);
+        
+    
+            var icon_4fb70b06c05ca9fdeefb60ba2510127d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "tint",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2975ea0061c0a209fc69bfd0c8926e2a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e0db690641004497ffc8ac29a5cce5a7 = $(`<div id="html_e0db690641004497ffc8ac29a5cce5a7" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Hesten trenger kvile" data-action="view_popup_generico" data-category="drinking_water"><b>Hesten trenger kvile</b><br><br>Free public drinking water. Bring your reusable bottle to reduce plastic waste!</div></div>`)[0];
+                popup_2975ea0061c0a209fc69bfd0c8926e2a.setContent(html_e0db690641004497ffc8ac29a5cce5a7);
+            
+        
+
+        marker_482af80c3c092c3db3b9102fca6c98ab.bindPopup(popup_2975ea0061c0a209fc69bfd0c8926e2a)
+        ;
+
+        
+    
+    
+                marker_482af80c3c092c3db3b9102fca6c98ab.setIcon(icon_4fb70b06c05ca9fdeefb60ba2510127d);
+            
+    
+            var marker_39e044567518f031bf058136f7e9b8b2 = L.marker(
+                [60.3996344, 5.318257],
+                {
+}
+            ).addTo(feature_group_01345913cf20e02827bb32dd5b764fd5);
+        
+    
+            var icon_d6a2540a07d281050401d9ba951f8196 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "blue",
+  "iconColor": "white",
+  "icon": "tint",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0f81155cb72ba0f8bdba534fc2c970de = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_b9ee1fad311b19774753160314068a05 = $(`<div id="html_b9ee1fad311b19774753160314068a05" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Trinkbrunnen im. SchloÃ" data-action="view_popup_generico" data-category="drinking_water"><b>Trinkbrunnen im. SchloÃ</b><br><br>Free public drinking water. Bring your reusable bottle to reduce plastic waste!</div></div>`)[0];
+                popup_0f81155cb72ba0f8bdba534fc2c970de.setContent(html_b9ee1fad311b19774753160314068a05);
+            
+        
+
+        marker_39e044567518f031bf058136f7e9b8b2.bindPopup(popup_0f81155cb72ba0f8bdba534fc2c970de)
+        ;
+
+        
+    
+    
+                marker_39e044567518f031bf058136f7e9b8b2.setIcon(icon_d6a2540a07d281050401d9ba951f8196);
+            
+    
+            var feature_group_c2d08db0c28f13287a3ac9d32876073f = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_246eea139b27207e988e42cf07d21698 = L.marker(
+                [52.6165053, 4.625081],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_0add2072c6aa1bda6297e31b07182ab2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a90da0665e087a273d9191cf165b7e81 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7beb96c9bc4c461993ca5dcfe3c07b00 = $(`<div id="html_7beb96c9bc4c461993ca5dcfe3c07b00" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="BikeMike.nl" data-action="view_popup_generico" data-category="bicycle_rental"><b>BikeMike.nl</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_a90da0665e087a273d9191cf165b7e81.setContent(html_7beb96c9bc4c461993ca5dcfe3c07b00);
+            
+        
+
+        marker_246eea139b27207e988e42cf07d21698.bindPopup(popup_a90da0665e087a273d9191cf165b7e81)
+        ;
+
+        
+    
+    
+                marker_246eea139b27207e988e42cf07d21698.setIcon(icon_0add2072c6aa1bda6297e31b07182ab2);
+            
+    
+            var marker_5e493d26e92e09ccbca6cc9f138cf90e = L.marker(
+                [60.3948652, 5.3443121],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_b0e91fc4fdbce34d178dca5cbad82d2b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_03cd03cb5721ba870d9d69e6178dd772 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a59de59f77658028a9b574750e2aa3e3 = $(`<div id="html_a59de59f77658028a9b574750e2aa3e3" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="FlÃ¸yen Aktiv" data-action="view_popup_generico" data-category="bicycle_rental"><b>FlÃ¸yen Aktiv</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_03cd03cb5721ba870d9d69e6178dd772.setContent(html_a59de59f77658028a9b574750e2aa3e3);
+            
+        
+
+        marker_5e493d26e92e09ccbca6cc9f138cf90e.bindPopup(popup_03cd03cb5721ba870d9d69e6178dd772)
+        ;
+
+        
+    
+    
+                marker_5e493d26e92e09ccbca6cc9f138cf90e.setIcon(icon_b0e91fc4fdbce34d178dca5cbad82d2b);
+            
+    
+            var marker_e1fdba490d48caf8539029f0f0434ce1 = L.marker(
+                [60.3783368, 5.3508767],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_387fae50bf4799e671bcef531ea0004d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d4fe0245f985f5f793a49b7ee164ce84 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5ed38217c6fc918fb5b24ad5ec96a8af = $(`<div id="html_5ed38217c6fc918fb5b24ad5ec96a8af" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Studentboligene" data-action="view_popup_generico" data-category="bicycle_rental"><b>Studentboligene</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_d4fe0245f985f5f793a49b7ee164ce84.setContent(html_5ed38217c6fc918fb5b24ad5ec96a8af);
+            
+        
+
+        marker_e1fdba490d48caf8539029f0f0434ce1.bindPopup(popup_d4fe0245f985f5f793a49b7ee164ce84)
+        ;
+
+        
+    
+    
+                marker_e1fdba490d48caf8539029f0f0434ce1.setIcon(icon_387fae50bf4799e671bcef531ea0004d);
+            
+    
+            var marker_31735de5a0d9632551636b0dc30d4b80 = L.marker(
+                [60.405695, 5.3233735],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_05192267e0467d2ae2bbcc2b6c5b2033 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e48c3eec23c682f57d5395e22392d777 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c73036a036ec1ddf79f26948c0bd30b7 = $(`<div id="html_c73036a036ec1ddf79f26948c0bd30b7" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Sandviksbodene" data-action="view_popup_generico" data-category="bicycle_rental"><b>Sandviksbodene</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_e48c3eec23c682f57d5395e22392d777.setContent(html_c73036a036ec1ddf79f26948c0bd30b7);
+            
+        
+
+        marker_31735de5a0d9632551636b0dc30d4b80.bindPopup(popup_e48c3eec23c682f57d5395e22392d777)
+        ;
+
+        
+    
+    
+                marker_31735de5a0d9632551636b0dc30d4b80.setIcon(icon_05192267e0467d2ae2bbcc2b6c5b2033);
+            
+    
+            var marker_3b918d5bf7b8b7d351222d266b6ff48b = L.marker(
+                [60.39264, 5.3290011],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_24aed14d1cff049f74d701761c215475 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f14d9bbc36139131d716643301ef760a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e3231b38569e12ba7fee7ad267d89c5f = $(`<div id="html_e3231b38569e12ba7fee7ad267d89c5f" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Allehelgens plass" data-action="view_popup_generico" data-category="bicycle_rental"><b>Allehelgens plass</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_f14d9bbc36139131d716643301ef760a.setContent(html_e3231b38569e12ba7fee7ad267d89c5f);
+            
+        
+
+        marker_3b918d5bf7b8b7d351222d266b6ff48b.bindPopup(popup_f14d9bbc36139131d716643301ef760a)
+        ;
+
+        
+    
+    
+                marker_3b918d5bf7b8b7d351222d266b6ff48b.setIcon(icon_24aed14d1cff049f74d701761c215475);
+            
+    
+            var marker_c9ee5c4c0dfebcdde1cfaeefcd4f4996 = L.marker(
+                [60.3926768, 5.3173083],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_f31345c88f8920636e47a5d8a1ca22b1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1fa19b75141493f3fb7ae10b81bb32df = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_122adbc92165616a72562f162afc483c = $(`<div id="html_122adbc92165616a72562f162afc483c" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Jonsvollkvartalet" data-action="view_popup_generico" data-category="bicycle_rental"><b>Jonsvollkvartalet</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_1fa19b75141493f3fb7ae10b81bb32df.setContent(html_122adbc92165616a72562f162afc483c);
+            
+        
+
+        marker_c9ee5c4c0dfebcdde1cfaeefcd4f4996.bindPopup(popup_1fa19b75141493f3fb7ae10b81bb32df)
+        ;
+
+        
+    
+    
+                marker_c9ee5c4c0dfebcdde1cfaeefcd4f4996.setIcon(icon_f31345c88f8920636e47a5d8a1ca22b1);
+            
+    
+            var marker_9a16331a171aaa78780b0883da53e878 = L.marker(
+                [60.3795718, 5.3518863],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_8d305559108835ca05fa6b9d59e802ff = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_896b19a0a972e97ddb049cb9bc6374e9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_293a86c9ea59cd85c9c104e2475879fa = $(`<div id="html_293a86c9ea59cd85c9c104e2475879fa" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="MÃ¸llendalsplass" data-action="view_popup_generico" data-category="bicycle_rental"><b>MÃ¸llendalsplass</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_896b19a0a972e97ddb049cb9bc6374e9.setContent(html_293a86c9ea59cd85c9c104e2475879fa);
+            
+        
+
+        marker_9a16331a171aaa78780b0883da53e878.bindPopup(popup_896b19a0a972e97ddb049cb9bc6374e9)
+        ;
+
+        
+    
+    
+                marker_9a16331a171aaa78780b0883da53e878.setIcon(icon_8d305559108835ca05fa6b9d59e802ff);
+            
+    
+            var marker_51437f4ef2596616d329f918a8a4331b = L.marker(
+                [60.4085821, 5.3226486],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_6d4e2045ab1b53521820db74e8a8c9f3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d5ed3276d7a22011393408805db7c6d5 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a519be6c78aefde00d2079e62c34a68b = $(`<div id="html_a519be6c78aefde00d2079e62c34a68b" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Sandvikstorget" data-action="view_popup_generico" data-category="bicycle_rental"><b>Sandvikstorget</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_d5ed3276d7a22011393408805db7c6d5.setContent(html_a519be6c78aefde00d2079e62c34a68b);
+            
+        
+
+        marker_51437f4ef2596616d329f918a8a4331b.bindPopup(popup_d5ed3276d7a22011393408805db7c6d5)
+        ;
+
+        
+    
+    
+                marker_51437f4ef2596616d329f918a8a4331b.setIcon(icon_6d4e2045ab1b53521820db74e8a8c9f3);
+            
+    
+            var marker_37d5ce8376cc9213479741b2881174a0 = L.marker(
+                [60.4129287, 5.3204736],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_ae858b4a81a80eef194b455a9585a941 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_698bc7949ad561f718be8e5bb40e28d9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_46a7b909017f64890000b1a103ea1225 = $(`<div id="html_46a7b909017f64890000b1a103ea1225" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Sandviken Brygge" data-action="view_popup_generico" data-category="bicycle_rental"><b>Sandviken Brygge</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_698bc7949ad561f718be8e5bb40e28d9.setContent(html_46a7b909017f64890000b1a103ea1225);
+            
+        
+
+        marker_37d5ce8376cc9213479741b2881174a0.bindPopup(popup_698bc7949ad561f718be8e5bb40e28d9)
+        ;
+
+        
+    
+    
+                marker_37d5ce8376cc9213479741b2881174a0.setIcon(icon_ae858b4a81a80eef194b455a9585a941);
+            
+    
+            var marker_afbd0c59646f86077b37cd49cb20f0fe = L.marker(
+                [60.3939768, 5.3187132],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_a9db1c146530558e085d585b1176b6c3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1702ce50d1b4f1d8111ed032195c897e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c4a119af778ce29cd39adff518235460 = $(`<div id="html_c4a119af778ce29cd39adff518235460" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Ãstre Murallmenningen Ã¸vre" data-action="view_popup_generico" data-category="bicycle_rental"><b>Ãstre Murallmenningen Ã¸vre</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_1702ce50d1b4f1d8111ed032195c897e.setContent(html_c4a119af778ce29cd39adff518235460);
+            
+        
+
+        marker_afbd0c59646f86077b37cd49cb20f0fe.bindPopup(popup_1702ce50d1b4f1d8111ed032195c897e)
+        ;
+
+        
+    
+    
+                marker_afbd0c59646f86077b37cd49cb20f0fe.setIcon(icon_a9db1c146530558e085d585b1176b6c3);
+            
+    
+            var marker_8af2d8af7710a8d9d60d7ee8939ec9d1 = L.marker(
+                [60.3881179, 5.3314872],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_ac104fae78786ee78a6bbd1730b30657 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_325ac51628aff65a9a6a74966470a3ea = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4ff04a82637eb23e04a7b24c636f33d8 = $(`<div id="html_4ff04a82637eb23e04a7b24c636f33d8" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Lars Hilles" data-action="view_popup_generico" data-category="bicycle_rental"><b>Lars Hilles</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_325ac51628aff65a9a6a74966470a3ea.setContent(html_4ff04a82637eb23e04a7b24c636f33d8);
+            
+        
+
+        marker_8af2d8af7710a8d9d60d7ee8939ec9d1.bindPopup(popup_325ac51628aff65a9a6a74966470a3ea)
+        ;
+
+        
+    
+    
+                marker_8af2d8af7710a8d9d60d7ee8939ec9d1.setIcon(icon_ac104fae78786ee78a6bbd1730b30657);
+            
+    
+            var marker_14b722233e872be11981671d26d5aae3 = L.marker(
+                [60.3908834, 5.3255689],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_4482c4b809dcd75dbf6848e9e174c40d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_14704350f4e816b62120005df3502e78 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_52bff5f07deb224febc6aa47f48a9582 = $(`<div id="html_52bff5f07deb224febc6aa47f48a9582" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Festplassen" data-action="view_popup_generico" data-category="bicycle_rental"><b>Festplassen</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_14704350f4e816b62120005df3502e78.setContent(html_52bff5f07deb224febc6aa47f48a9582);
+            
+        
+
+        marker_14b722233e872be11981671d26d5aae3.bindPopup(popup_14704350f4e816b62120005df3502e78)
+        ;
+
+        
+    
+    
+                marker_14b722233e872be11981671d26d5aae3.setIcon(icon_4482c4b809dcd75dbf6848e9e174c40d);
+            
+    
+            var marker_c21101fc5b50bdd9d2d3dada06fcc115 = L.marker(
+                [60.3844673, 5.3100077],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_2b877510649191f029abcc359bc0d058 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_750c4acc94cdafe112b32959cb33ab6a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_7f8bafc86530f5e9a5dd421a2808d720 = $(`<div id="html_7f8bafc86530f5e9a5dd421a2808d720" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="FrydenbÃ¸ Marina" data-action="view_popup_generico" data-category="bicycle_rental"><b>FrydenbÃ¸ Marina</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_750c4acc94cdafe112b32959cb33ab6a.setContent(html_7f8bafc86530f5e9a5dd421a2808d720);
+            
+        
+
+        marker_c21101fc5b50bdd9d2d3dada06fcc115.bindPopup(popup_750c4acc94cdafe112b32959cb33ab6a)
+        ;
+
+        
+    
+    
+                marker_c21101fc5b50bdd9d2d3dada06fcc115.setIcon(icon_2b877510649191f029abcc359bc0d058);
+            
+    
+            var marker_7b16a72b692222d9a676adff87ec058d = L.marker(
+                [60.3867091, 5.2991301],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_cf61ee882af1abba478f270988f8986a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1a25ae7a113f708340ca2f9195144cf2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_557d9fde9aad01fd50076861198f6d96 = $(`<div id="html_557d9fde9aad01fd50076861198f6d96" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="DamsgÃ¥rdsallmenningen" data-action="view_popup_generico" data-category="bicycle_rental"><b>DamsgÃ¥rdsallmenningen</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_1a25ae7a113f708340ca2f9195144cf2.setContent(html_557d9fde9aad01fd50076861198f6d96);
+            
+        
+
+        marker_7b16a72b692222d9a676adff87ec058d.bindPopup(popup_1a25ae7a113f708340ca2f9195144cf2)
+        ;
+
+        
+    
+    
+                marker_7b16a72b692222d9a676adff87ec058d.setIcon(icon_cf61ee882af1abba478f270988f8986a);
+            
+    
+            var marker_d84d2afdf85f0eea43907da737d5c836 = L.marker(
+                [60.3781072, 5.3310208],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_4d93cd9fe766b1b2fd76173224d83d2b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c33df7e55b041205b6c82fcef2bee5c9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0ad63a460eb7bfd70024d85c85ec040b = $(`<div id="html_0ad63a460eb7bfd70024d85c85ec040b" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Krohnviken" data-action="view_popup_generico" data-category="bicycle_rental"><b>Krohnviken</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_c33df7e55b041205b6c82fcef2bee5c9.setContent(html_0ad63a460eb7bfd70024d85c85ec040b);
+            
+        
+
+        marker_d84d2afdf85f0eea43907da737d5c836.bindPopup(popup_c33df7e55b041205b6c82fcef2bee5c9)
+        ;
+
+        
+    
+    
+                marker_d84d2afdf85f0eea43907da737d5c836.setIcon(icon_4d93cd9fe766b1b2fd76173224d83d2b);
+            
+    
+            var marker_266f096e386b383212eb77e0591205f8 = L.marker(
+                [60.3815506, 5.3194499],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_ad6f1c404550830962b8b49e1908cd60 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c0c61ca315d13965254da438df69c135 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_649c23a07b7b81248c0c72fa74f0ce55 = $(`<div id="html_649c23a07b7b81248c0c72fa74f0ce55" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="DamsgÃ¥rdsveien" data-action="view_popup_generico" data-category="bicycle_rental"><b>DamsgÃ¥rdsveien</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_c0c61ca315d13965254da438df69c135.setContent(html_649c23a07b7b81248c0c72fa74f0ce55);
+            
+        
+
+        marker_266f096e386b383212eb77e0591205f8.bindPopup(popup_c0c61ca315d13965254da438df69c135)
+        ;
+
+        
+    
+    
+                marker_266f096e386b383212eb77e0591205f8.setIcon(icon_ad6f1c404550830962b8b49e1908cd60);
+            
+    
+            var marker_d9d22dcf7c23ee3076ce9f368f01b6e9 = L.marker(
+                [60.375164, 5.3384682],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_c0d183092ec2aa52d40dc72f9ec97e31 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_f9b48efa241abbaffe7b48d2aa663039 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5b26c00d4365fb0882b261a6786904e4 = $(`<div id="html_5b26c00d4365fb0882b261a6786904e4" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Solheimsgaten COOP Extra" data-action="view_popup_generico" data-category="bicycle_rental"><b>Solheimsgaten COOP Extra</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_f9b48efa241abbaffe7b48d2aa663039.setContent(html_5b26c00d4365fb0882b261a6786904e4);
+            
+        
+
+        marker_d9d22dcf7c23ee3076ce9f368f01b6e9.bindPopup(popup_f9b48efa241abbaffe7b48d2aa663039)
+        ;
+
+        
+    
+    
+                marker_d9d22dcf7c23ee3076ce9f368f01b6e9.setIcon(icon_c0d183092ec2aa52d40dc72f9ec97e31);
+            
+    
+            var marker_874a2dca839801e249ddcb2958d45e88 = L.marker(
+                [60.3762327, 5.3343706],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_74fd16f879b8f0c2c0b0a1e23fcec7c0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c19d66fec601678d9164a5a91aac9b76 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_2ea0bdedbbdcf3bc696d03ed552f864f = $(`<div id="html_2ea0bdedbbdcf3bc696d03ed552f864f" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="BÃ¸hmergaten" data-action="view_popup_generico" data-category="bicycle_rental"><b>BÃ¸hmergaten</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_c19d66fec601678d9164a5a91aac9b76.setContent(html_2ea0bdedbbdcf3bc696d03ed552f864f);
+            
+        
+
+        marker_874a2dca839801e249ddcb2958d45e88.bindPopup(popup_c19d66fec601678d9164a5a91aac9b76)
+        ;
+
+        
+    
+    
+                marker_874a2dca839801e249ddcb2958d45e88.setIcon(icon_74fd16f879b8f0c2c0b0a1e23fcec7c0);
+            
+    
+            var marker_c01095c881994c93174c7f05f97d592a = L.marker(
+                [60.3739522, 5.3418984],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_e69bab4466bf08c39dc9f0a768dd155e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7c8aa9fe49abcc65df932d4cca6154d6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c60deb064b6588f7c336f559d15ab59e = $(`<div id="html_c60deb064b6588f7c336f559d15ab59e" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="BjÃ¸rnsonsgate" data-action="view_popup_generico" data-category="bicycle_rental"><b>BjÃ¸rnsonsgate</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_7c8aa9fe49abcc65df932d4cca6154d6.setContent(html_c60deb064b6588f7c336f559d15ab59e);
+            
+        
+
+        marker_c01095c881994c93174c7f05f97d592a.bindPopup(popup_7c8aa9fe49abcc65df932d4cca6154d6)
+        ;
+
+        
+    
+    
+                marker_c01095c881994c93174c7f05f97d592a.setIcon(icon_e69bab4466bf08c39dc9f0a768dd155e);
+            
+    
+            var marker_cba21db073157caaa1f9994ad92cff78 = L.marker(
+                [60.3758271, 5.3423336],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_4e66d7231e9afe68a36e431e1652ccd7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_00d56e6b2181ae0abf453210fae97658 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8e94cc42ec48ce7908e494e8dd82104f = $(`<div id="html_8e94cc42ec48ce7908e494e8dd82104f" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Krohnsminde Parkering" data-action="view_popup_generico" data-category="bicycle_rental"><b>Krohnsminde Parkering</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_00d56e6b2181ae0abf453210fae97658.setContent(html_8e94cc42ec48ce7908e494e8dd82104f);
+            
+        
+
+        marker_cba21db073157caaa1f9994ad92cff78.bindPopup(popup_00d56e6b2181ae0abf453210fae97658)
+        ;
+
+        
+    
+    
+                marker_cba21db073157caaa1f9994ad92cff78.setIcon(icon_4e66d7231e9afe68a36e431e1652ccd7);
+            
+    
+            var marker_554a1cddc769eeac68c45a4143495478 = L.marker(
+                [60.376083, 5.3398514],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_3fe67f3101e845fd5c28a6bf733b068d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4ec395995da180a5f57faee07aa01a66 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1dd133b25f28e2091b4423db86e09c1c = $(`<div id="html_1dd133b25f28e2091b4423db86e09c1c" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Danmarksplass" data-action="view_popup_generico" data-category="bicycle_rental"><b>Danmarksplass</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_4ec395995da180a5f57faee07aa01a66.setContent(html_1dd133b25f28e2091b4423db86e09c1c);
+            
+        
+
+        marker_554a1cddc769eeac68c45a4143495478.bindPopup(popup_4ec395995da180a5f57faee07aa01a66)
+        ;
+
+        
+    
+    
+                marker_554a1cddc769eeac68c45a4143495478.setIcon(icon_3fe67f3101e845fd5c28a6bf733b068d);
+            
+    
+            var marker_724ffbddcec0252058b4ce3dd1cc9089 = L.marker(
+                [60.3870588, 5.3356339],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_09404d64d169ec9fcb9a19e6b2864231 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1ca3aac29fdc2a4f28c33d68016443ba = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e66d7f641de042b4ad3aea6836d138cd = $(`<div id="html_e66d7f641de042b4ad3aea6836d138cd" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Busstasjonen 4 SÃ¸r" data-action="view_popup_generico" data-category="bicycle_rental"><b>Busstasjonen 4 SÃ¸r</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_1ca3aac29fdc2a4f28c33d68016443ba.setContent(html_e66d7f641de042b4ad3aea6836d138cd);
+            
+        
+
+        marker_724ffbddcec0252058b4ce3dd1cc9089.bindPopup(popup_1ca3aac29fdc2a4f28c33d68016443ba)
+        ;
+
+        
+    
+    
+                marker_724ffbddcec0252058b4ce3dd1cc9089.setIcon(icon_09404d64d169ec9fcb9a19e6b2864231);
+            
+    
+            var marker_7e04273fcb63ce1f31b757609a16fa3c = L.marker(
+                [60.3878563, 5.3344592],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_59796a55dca5bdfa1ccd3e778452e104 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_fc0288ff1c767e757314d532db471241 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_4296097e3832cacc6aeb05da971644e2 = $(`<div id="html_4296097e3832cacc6aeb05da971644e2" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Busstasjonen 3 Ãst" data-action="view_popup_generico" data-category="bicycle_rental"><b>Busstasjonen 3 Ãst</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_fc0288ff1c767e757314d532db471241.setContent(html_4296097e3832cacc6aeb05da971644e2);
+            
+        
+
+        marker_7e04273fcb63ce1f31b757609a16fa3c.bindPopup(popup_fc0288ff1c767e757314d532db471241)
+        ;
+
+        
+    
+    
+                marker_7e04273fcb63ce1f31b757609a16fa3c.setIcon(icon_59796a55dca5bdfa1ccd3e778452e104);
+            
+    
+            var marker_2e7832551c1b1a215026109599b6689a = L.marker(
+                [60.3900562, 5.3354808],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_8c46409a113c9156298d8ec043b0c543 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e9eb09b61a5dd0e2d94a0474568d73d1 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ef0c4fba473a042906f4f1a8332ca947 = $(`<div id="html_ef0c4fba473a042906f4f1a8332ca947" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Zander Kaas gate" data-action="view_popup_generico" data-category="bicycle_rental"><b>Zander Kaas gate</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_e9eb09b61a5dd0e2d94a0474568d73d1.setContent(html_ef0c4fba473a042906f4f1a8332ca947);
+            
+        
+
+        marker_2e7832551c1b1a215026109599b6689a.bindPopup(popup_e9eb09b61a5dd0e2d94a0474568d73d1)
+        ;
+
+        
+    
+    
+                marker_2e7832551c1b1a215026109599b6689a.setIcon(icon_8c46409a113c9156298d8ec043b0c543);
+            
+    
+            var marker_b5a160d98c7542ddfe66a4ba09b05d4d = L.marker(
+                [60.3882838, 5.3328727],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_71f5c3d7302f14225adc778c6da2d1d7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2366759d6d20cf8124b9ae8acbed1175 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9bc166875ae06e7c36379b01685d53ee = $(`<div id="html_9bc166875ae06e7c36379b01685d53ee" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Busstasjonen 2 Vest" data-action="view_popup_generico" data-category="bicycle_rental"><b>Busstasjonen 2 Vest</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_2366759d6d20cf8124b9ae8acbed1175.setContent(html_9bc166875ae06e7c36379b01685d53ee);
+            
+        
+
+        marker_b5a160d98c7542ddfe66a4ba09b05d4d.bindPopup(popup_2366759d6d20cf8124b9ae8acbed1175)
+        ;
+
+        
+    
+    
+                marker_b5a160d98c7542ddfe66a4ba09b05d4d.setIcon(icon_71f5c3d7302f14225adc778c6da2d1d7);
+            
+    
+            var marker_9870c6aad9e1543bccb87382225f5b26 = L.marker(
+                [60.3865817, 5.3279787],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_9e56fa3e60971bbeced130391dc273c9 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_47974a13365825d76ecbcf48e4ab4ec6 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9726c66c70ac282a203d3a8d4b815c64 = $(`<div id="html_9726c66c70ac282a203d3a8d4b815c64" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Fosswinckels gate" data-action="view_popup_generico" data-category="bicycle_rental"><b>Fosswinckels gate</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_47974a13365825d76ecbcf48e4ab4ec6.setContent(html_9726c66c70ac282a203d3a8d4b815c64);
+            
+        
+
+        marker_9870c6aad9e1543bccb87382225f5b26.bindPopup(popup_47974a13365825d76ecbcf48e4ab4ec6)
+        ;
+
+        
+    
+    
+                marker_9870c6aad9e1543bccb87382225f5b26.setIcon(icon_9e56fa3e60971bbeced130391dc273c9);
+            
+    
+            var marker_04cc5998ff2f06a96beb8fb78f41e89c = L.marker(
+                [60.3866972, 5.3309719],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_0d2c54c981041d12babb99b229f7fe4a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_37c98423ae4fca7a9f8b4c5b639d48ec = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0bb0427802395a3b23ab225e0f7d361a = $(`<div id="html_0bb0427802395a3b23ab225e0f7d361a" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="St. Jakobs Plass" data-action="view_popup_generico" data-category="bicycle_rental"><b>St. Jakobs Plass</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_37c98423ae4fca7a9f8b4c5b639d48ec.setContent(html_0bb0427802395a3b23ab225e0f7d361a);
+            
+        
+
+        marker_04cc5998ff2f06a96beb8fb78f41e89c.bindPopup(popup_37c98423ae4fca7a9f8b4c5b639d48ec)
+        ;
+
+        
+    
+    
+                marker_04cc5998ff2f06a96beb8fb78f41e89c.setIcon(icon_0d2c54c981041d12babb99b229f7fe4a);
+            
+    
+            var marker_d73238862230c3e02f6503a53bdd8459 = L.marker(
+                [60.3882473, 5.3245582],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_a51a37a37bcf626360559de2f3d5a7f0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2612ef2225fd136879e946d9689071c8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6f971b51d84005e8e8d5657d2cce8bb9 = $(`<div id="html_6f971b51d84005e8e8d5657d2cce8bb9" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="John Lunds plass" data-action="view_popup_generico" data-category="bicycle_rental"><b>John Lunds plass</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_2612ef2225fd136879e946d9689071c8.setContent(html_6f971b51d84005e8e8d5657d2cce8bb9);
+            
+        
+
+        marker_d73238862230c3e02f6503a53bdd8459.bindPopup(popup_2612ef2225fd136879e946d9689071c8)
+        ;
+
+        
+    
+    
+                marker_d73238862230c3e02f6503a53bdd8459.setIcon(icon_a51a37a37bcf626360559de2f3d5a7f0);
+            
+    
+            var marker_b2adde21f9875a4e19aff37d6e2f25dc = L.marker(
+                [60.3865354, 5.3261158],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_4f4bd0bdc1ee0a6844f0ef310c30f9b7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c02c316ea9cb621a873f78c7dd592058 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_fc723a6f5451a30a75ee3eaaf2ac9924 = $(`<div id="html_fc723a6f5451a30a75ee3eaaf2ac9924" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="StrÃ¸mgaten" data-action="view_popup_generico" data-category="bicycle_rental"><b>StrÃ¸mgaten</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_c02c316ea9cb621a873f78c7dd592058.setContent(html_fc723a6f5451a30a75ee3eaaf2ac9924);
+            
+        
+
+        marker_b2adde21f9875a4e19aff37d6e2f25dc.bindPopup(popup_c02c316ea9cb621a873f78c7dd592058)
+        ;
+
+        
+    
+    
+                marker_b2adde21f9875a4e19aff37d6e2f25dc.setIcon(icon_4f4bd0bdc1ee0a6844f0ef310c30f9b7);
+            
+    
+            var marker_9c6c574e8a7e33dbdd95e00f86916297 = L.marker(
+                [60.3878537, 5.3187129],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_447e5cf66725eac9b6b10bf9886261db = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_fb5c2147a16524957b8b4c71e8cfa7db = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_72ed1ec7f58d859a481cf61aacf33cdc = $(`<div id="html_72ed1ec7f58d859a481cf61aacf33cdc" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="HF-Bygget" data-action="view_popup_generico" data-category="bicycle_rental"><b>HF-Bygget</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_fb5c2147a16524957b8b4c71e8cfa7db.setContent(html_72ed1ec7f58d859a481cf61aacf33cdc);
+            
+        
+
+        marker_9c6c574e8a7e33dbdd95e00f86916297.bindPopup(popup_fb5c2147a16524957b8b4c71e8cfa7db)
+        ;
+
+        
+    
+    
+                marker_9c6c574e8a7e33dbdd95e00f86916297.setIcon(icon_447e5cf66725eac9b6b10bf9886261db);
+            
+    
+            var marker_78d01aa2690379f43c462628c2c60d08 = L.marker(
+                [60.3878409, 5.3200871],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_621499bcdf7ac8f923fbe1692d470bb4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a6977e249d185033941dd583baee3c6c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d16f2f978552ed21c75a7f8c0eecf04c = $(`<div id="html_d16f2f978552ed21c75a7f8c0eecf04c" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Haakon Sheteligs plass" data-action="view_popup_generico" data-category="bicycle_rental"><b>Haakon Sheteligs plass</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_a6977e249d185033941dd583baee3c6c.setContent(html_d16f2f978552ed21c75a7f8c0eecf04c);
+            
+        
+
+        marker_78d01aa2690379f43c462628c2c60d08.bindPopup(popup_a6977e249d185033941dd583baee3c6c)
+        ;
+
+        
+    
+    
+                marker_78d01aa2690379f43c462628c2c60d08.setIcon(icon_621499bcdf7ac8f923fbe1692d470bb4);
+            
+    
+            var marker_ec81be6d8985231fd992f633b803c393 = L.marker(
+                [60.3897189, 5.3149487],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_41b4b8f1873f0b32d8bd83d9a0828b75 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_61404023fe7977d9d44e6f7faaad0489 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8534dfd4e160aa7ef592b66285bdb0df = $(`<div id="html_8534dfd4e160aa7ef592b66285bdb0df" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Magnus LagabÃ¸tes Plass" data-action="view_popup_generico" data-category="bicycle_rental"><b>Magnus LagabÃ¸tes Plass</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_61404023fe7977d9d44e6f7faaad0489.setContent(html_8534dfd4e160aa7ef592b66285bdb0df);
+            
+        
+
+        marker_ec81be6d8985231fd992f633b803c393.bindPopup(popup_61404023fe7977d9d44e6f7faaad0489)
+        ;
+
+        
+    
+    
+                marker_ec81be6d8985231fd992f633b803c393.setIcon(icon_41b4b8f1873f0b32d8bd83d9a0828b75);
+            
+    
+            var marker_fadaf2c7a95a2fd9afb799dbb3d96dff = L.marker(
+                [60.3901741, 5.3247922],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_4e62835f626150d4cf22b0dd442b4ec0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_754be74a1b9a0283cf8e987b18275748 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_fd407788af04f2753b5f8061d3659ff8 = $(`<div id="html_fd407788af04f2753b5f8061d3659ff8" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Kode 2" data-action="view_popup_generico" data-category="bicycle_rental"><b>Kode 2</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_754be74a1b9a0283cf8e987b18275748.setContent(html_fd407788af04f2753b5f8061d3659ff8);
+            
+        
+
+        marker_fadaf2c7a95a2fd9afb799dbb3d96dff.bindPopup(popup_754be74a1b9a0283cf8e987b18275748)
+        ;
+
+        
+    
+    
+                marker_fadaf2c7a95a2fd9afb799dbb3d96dff.setIcon(icon_4e62835f626150d4cf22b0dd442b4ec0);
+            
+    
+            var marker_e2b10eb283a90504db3abad4e753fc76 = L.marker(
+                [60.3911846, 5.3180263],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_2cce2a13ba2f7c093981f09e21e65f5b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6bd71f723d1cadac6d4b258336be689f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9debb479d64a7239cd0df455b5e76f3e = $(`<div id="html_9debb479d64a7239cd0df455b5e76f3e" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="HÃ¥konsgaten" data-action="view_popup_generico" data-category="bicycle_rental"><b>HÃ¥konsgaten</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_6bd71f723d1cadac6d4b258336be689f.setContent(html_9debb479d64a7239cd0df455b5e76f3e);
+            
+        
+
+        marker_e2b10eb283a90504db3abad4e753fc76.bindPopup(popup_6bd71f723d1cadac6d4b258336be689f)
+        ;
+
+        
+    
+    
+                marker_e2b10eb283a90504db3abad4e753fc76.setIcon(icon_2cce2a13ba2f7c093981f09e21e65f5b);
+            
+    
+            var marker_919eb9b3ab5ae944716e90e42b610b8d = L.marker(
+                [60.397709, 5.3220006],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_180bfbbc7c6d95d1393ee9d23b875877 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a3429fb0ed552ba3dc9f0aa74ac93bf3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_72855c00633bb0c15ed2739aa7122456 = $(`<div id="html_72855c00633bb0c15ed2739aa7122456" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Dreggsallmenningen SÃ¸r" data-action="view_popup_generico" data-category="bicycle_rental"><b>Dreggsallmenningen SÃ¸r</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_a3429fb0ed552ba3dc9f0aa74ac93bf3.setContent(html_72855c00633bb0c15ed2739aa7122456);
+            
+        
+
+        marker_919eb9b3ab5ae944716e90e42b610b8d.bindPopup(popup_a3429fb0ed552ba3dc9f0aa74ac93bf3)
+        ;
+
+        
+    
+    
+                marker_919eb9b3ab5ae944716e90e42b610b8d.setIcon(icon_180bfbbc7c6d95d1393ee9d23b875877);
+            
+    
+            var marker_efeee8f7b4b41883e0fc3a7ec8c572d0 = L.marker(
+                [60.3959732, 5.3284799],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_570d255b55fbcec249ae4fbe1f3a1f9a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_805ad94dabad54090f763b18ad7e0762 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0def1da54eb70f178c91abef22e63301 = $(`<div id="html_0def1da54eb70f178c91abef22e63301" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Lille Ãvregate" data-action="view_popup_generico" data-category="bicycle_rental"><b>Lille Ãvregate</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_805ad94dabad54090f763b18ad7e0762.setContent(html_0def1da54eb70f178c91abef22e63301);
+            
+        
+
+        marker_efeee8f7b4b41883e0fc3a7ec8c572d0.bindPopup(popup_805ad94dabad54090f763b18ad7e0762)
+        ;
+
+        
+    
+    
+                marker_efeee8f7b4b41883e0fc3a7ec8c572d0.setIcon(icon_570d255b55fbcec249ae4fbe1f3a1f9a);
+            
+    
+            var marker_af45cddf16d546349a072e10010a722c = L.marker(
+                [60.3986565, 5.3221426],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_2a778e926e78d9debc6ed1e80436c360 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2846deb0fa4fc0aa9fad73dfd0150119 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a1e01970b8fe2b62f756191aa0efe767 = $(`<div id="html_a1e01970b8fe2b62f756191aa0efe767" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Dreggsallmenningen Nord" data-action="view_popup_generico" data-category="bicycle_rental"><b>Dreggsallmenningen Nord</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_2846deb0fa4fc0aa9fad73dfd0150119.setContent(html_a1e01970b8fe2b62f756191aa0efe767);
+            
+        
+
+        marker_af45cddf16d546349a072e10010a722c.bindPopup(popup_2846deb0fa4fc0aa9fad73dfd0150119)
+        ;
+
+        
+    
+    
+                marker_af45cddf16d546349a072e10010a722c.setIcon(icon_2a778e926e78d9debc6ed1e80436c360);
+            
+    
+            var marker_4957812652e8c9e0a33769d29e4b5040 = L.marker(
+                [60.4080793, 5.3254574],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_6fff2a0c521aa4f5655e9ec7bfcd46c1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_716eb3aca5fc3b43946d9c5877fd838b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_834a4eade9da78f98758f17ef43d8f61 = $(`<div id="html_834a4eade9da78f98758f17ef43d8f61" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Amalie Skrams vei SÃ¸r" data-action="view_popup_generico" data-category="bicycle_rental"><b>Amalie Skrams vei SÃ¸r</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_716eb3aca5fc3b43946d9c5877fd838b.setContent(html_834a4eade9da78f98758f17ef43d8f61);
+            
+        
+
+        marker_4957812652e8c9e0a33769d29e4b5040.bindPopup(popup_716eb3aca5fc3b43946d9c5877fd838b)
+        ;
+
+        
+    
+    
+                marker_4957812652e8c9e0a33769d29e4b5040.setIcon(icon_6fff2a0c521aa4f5655e9ec7bfcd46c1);
+            
+    
+            var marker_c265651c4d839d4d550e1ea48e3e442f = L.marker(
+                [60.4022082, 5.3208768],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_f4cd4e0440901a0d8fa904118c36762e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_eecd9241feb6c895304beb0a68cd30d0 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bafbee27edee10fea14484ae37d78e8e = $(`<div id="html_bafbee27edee10fea14484ae37d78e8e" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Skutevikstorget" data-action="view_popup_generico" data-category="bicycle_rental"><b>Skutevikstorget</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_eecd9241feb6c895304beb0a68cd30d0.setContent(html_bafbee27edee10fea14484ae37d78e8e);
+            
+        
+
+        marker_c265651c4d839d4d550e1ea48e3e442f.bindPopup(popup_eecd9241feb6c895304beb0a68cd30d0)
+        ;
+
+        
+    
+    
+                marker_c265651c4d839d4d550e1ea48e3e442f.setIcon(icon_f4cd4e0440901a0d8fa904118c36762e);
+            
+    
+            var marker_ebca68e183f725672209f772a8239a13 = L.marker(
+                [60.4019055, 5.3247478],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_a43d791ace39af1193ff5231b243ca55 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_15941940aba0e3b2217c942f525b4575 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f6f9b732ece0a159a28a8a6c875a06e9 = $(`<div id="html_f6f9b732ece0a159a28a8a6c875a06e9" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Hans Hauges gate" data-action="view_popup_generico" data-category="bicycle_rental"><b>Hans Hauges gate</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_15941940aba0e3b2217c942f525b4575.setContent(html_f6f9b732ece0a159a28a8a6c875a06e9);
+            
+        
+
+        marker_ebca68e183f725672209f772a8239a13.bindPopup(popup_15941940aba0e3b2217c942f525b4575)
+        ;
+
+        
+    
+    
+                marker_ebca68e183f725672209f772a8239a13.setIcon(icon_a43d791ace39af1193ff5231b243ca55);
+            
+    
+            var marker_2c1776cfeef380458ce43fd5f1622b61 = L.marker(
+                [60.4109292, 5.3246628],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_41029aac93afe11c24bc65108d5b7160 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_acfad274bc02057308de4661c58b0d08 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_2e8fad35b94ef813bd914ead7906b7a3 = $(`<div id="html_2e8fad35b94ef813bd914ead7906b7a3" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Amalie Skrams vei Nord" data-action="view_popup_generico" data-category="bicycle_rental"><b>Amalie Skrams vei Nord</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_acfad274bc02057308de4661c58b0d08.setContent(html_2e8fad35b94ef813bd914ead7906b7a3);
+            
+        
+
+        marker_2c1776cfeef380458ce43fd5f1622b61.bindPopup(popup_acfad274bc02057308de4661c58b0d08)
+        ;
+
+        
+    
+    
+                marker_2c1776cfeef380458ce43fd5f1622b61.setIcon(icon_41029aac93afe11c24bc65108d5b7160);
+            
+    
+            var marker_f26ec7cfc0033a75860afecd264fc273 = L.marker(
+                [60.3950701, 5.3187984],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_cc637d1ffee1af188f7b57321880f824 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2e7cd4191959e9c25505b95cedc09595 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_068782d69912a31f65fad5f113852325 = $(`<div id="html_068782d69912a31f65fad5f113852325" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="GÃ¥gaten" data-action="view_popup_generico" data-category="bicycle_rental"><b>GÃ¥gaten</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_2e7cd4191959e9c25505b95cedc09595.setContent(html_068782d69912a31f65fad5f113852325);
+            
+        
+
+        marker_f26ec7cfc0033a75860afecd264fc273.bindPopup(popup_2e7cd4191959e9c25505b95cedc09595)
+        ;
+
+        
+    
+    
+                marker_f26ec7cfc0033a75860afecd264fc273.setIcon(icon_cc637d1ffee1af188f7b57321880f824);
+            
+    
+            var marker_38abaa15de366eb7a061591d42535b8f = L.marker(
+                [60.3969267, 5.3134183],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_310b9f43e37be384f100f10a518ffd27 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_705298dc796021a002cf742468de7952 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6a4363e3fbc3922db64f72694bc86530 = $(`<div id="html_6a4363e3fbc3922db64f72694bc86530" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Nykirken" data-action="view_popup_generico" data-category="bicycle_rental"><b>Nykirken</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_705298dc796021a002cf742468de7952.setContent(html_6a4363e3fbc3922db64f72694bc86530);
+            
+        
+
+        marker_38abaa15de366eb7a061591d42535b8f.bindPopup(popup_705298dc796021a002cf742468de7952)
+        ;
+
+        
+    
+    
+                marker_38abaa15de366eb7a061591d42535b8f.setIcon(icon_310b9f43e37be384f100f10a518ffd27);
+            
+    
+            var marker_d980a706a92e75695966f46beb38ab7c = L.marker(
+                [60.3945051, 5.3271852],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_e04ed3152d45dff49c3f53d13869b0a1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e8d4561363b3a0c1e351cf5e199d7ec8 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0807dc0d9adf8aff00181b5d3a39603b = $(`<div id="html_0807dc0d9adf8aff00181b5d3a39603b" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Nedre Korskirkeallmenning" data-action="view_popup_generico" data-category="bicycle_rental"><b>Nedre Korskirkeallmenning</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_e8d4561363b3a0c1e351cf5e199d7ec8.setContent(html_0807dc0d9adf8aff00181b5d3a39603b);
+            
+        
+
+        marker_d980a706a92e75695966f46beb38ab7c.bindPopup(popup_e8d4561363b3a0c1e351cf5e199d7ec8)
+        ;
+
+        
+    
+    
+                marker_d980a706a92e75695966f46beb38ab7c.setIcon(icon_e04ed3152d45dff49c3f53d13869b0a1);
+            
+    
+            var marker_8610ff20a8cbd54ff98c1deb5b148b3f = L.marker(
+                [60.3951415, 5.3198398],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_a164b0262471ed5c4a081b47d0adbfc4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1acf6279b375d1cb98d826713740ee18 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d99ce78be40fedf1e60078d49f5680fb = $(`<div id="html_d99ce78be40fedf1e60078d49f5680fb" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Ãstre Murallmenningen nedre" data-action="view_popup_generico" data-category="bicycle_rental"><b>Ãstre Murallmenningen nedre</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_1acf6279b375d1cb98d826713740ee18.setContent(html_d99ce78be40fedf1e60078d49f5680fb);
+            
+        
+
+        marker_8610ff20a8cbd54ff98c1deb5b148b3f.bindPopup(popup_1acf6279b375d1cb98d826713740ee18)
+        ;
+
+        
+    
+    
+                marker_8610ff20a8cbd54ff98c1deb5b148b3f.setIcon(icon_a164b0262471ed5c4a081b47d0adbfc4);
+            
+    
+            var marker_a19c4caeb833eb6082341a11e84aaaac = L.marker(
+                [60.3831624, 5.3240531],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_4a1fc3ed3f19055c85ddb027ad3a18aa = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_dfcf1bab70dc3fcb80dbef8eddff59a4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_1560dd3804817b5e1d7f3eb658b66d89 = $(`<div id="html_1560dd3804817b5e1d7f3eb658b66d89" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="ThormÃ¸hlens gate 30" data-action="view_popup_generico" data-category="bicycle_rental"><b>ThormÃ¸hlens gate 30</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_dfcf1bab70dc3fcb80dbef8eddff59a4.setContent(html_1560dd3804817b5e1d7f3eb658b66d89);
+            
+        
+
+        marker_a19c4caeb833eb6082341a11e84aaaac.bindPopup(popup_dfcf1bab70dc3fcb80dbef8eddff59a4)
+        ;
+
+        
+    
+    
+                marker_a19c4caeb833eb6082341a11e84aaaac.setIcon(icon_4a1fc3ed3f19055c85ddb027ad3a18aa);
+            
+    
+            var marker_2d01053ee237ee35f4e1c08ac9bd52b0 = L.marker(
+                [60.3936971, 5.3265936],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_5b12909f13a21b099b8ef676bde5c561 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a23a394f96aa4a2462548181f3b03e4c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5d6c5c61275f565433e02617b9202f87 = $(`<div id="html_5d6c5c61275f565433e02617b9202f87" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="VÃ¥gsallmenningen" data-action="view_popup_generico" data-category="bicycle_rental"><b>VÃ¥gsallmenningen</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_a23a394f96aa4a2462548181f3b03e4c.setContent(html_5d6c5c61275f565433e02617b9202f87);
+            
+        
+
+        marker_2d01053ee237ee35f4e1c08ac9bd52b0.bindPopup(popup_a23a394f96aa4a2462548181f3b03e4c)
+        ;
+
+        
+    
+    
+                marker_2d01053ee237ee35f4e1c08ac9bd52b0.setIcon(icon_5b12909f13a21b099b8ef676bde5c561);
+            
+    
+            var marker_1729aab3e8d3c3a7f354fe6bc82b911f = L.marker(
+                [60.396409, 5.3240721],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_b5e19eddadd7c1b01d3fcff0897b90c0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0dc9a58e0395a38441f70cd2d96bbeaa = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_8bcf161ab2a4af0f2b934f8914bf8003 = $(`<div id="html_8bcf161ab2a4af0f2b934f8914bf8003" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Skur 11" data-action="view_popup_generico" data-category="bicycle_rental"><b>Skur 11</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_0dc9a58e0395a38441f70cd2d96bbeaa.setContent(html_8bcf161ab2a4af0f2b934f8914bf8003);
+            
+        
+
+        marker_1729aab3e8d3c3a7f354fe6bc82b911f.bindPopup(popup_0dc9a58e0395a38441f70cd2d96bbeaa)
+        ;
+
+        
+    
+    
+                marker_1729aab3e8d3c3a7f354fe6bc82b911f.setIcon(icon_b5e19eddadd7c1b01d3fcff0897b90c0);
+            
+    
+            var marker_df287bf7dd7babbac4deb72226319db0 = L.marker(
+                [60.3677274, 5.3553458],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_710ef9c5913d042eb7ba73a870934edd = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1e9b280fc4e74d5abb141651df8e7497 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_9894ad0234f38f12aaa13d5baf812101 = $(`<div id="html_9894ad0234f38f12aaa13d5baf812101" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Brann Stadion" data-action="view_popup_generico" data-category="bicycle_rental"><b>Brann Stadion</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_1e9b280fc4e74d5abb141651df8e7497.setContent(html_9894ad0234f38f12aaa13d5baf812101);
+            
+        
+
+        marker_df287bf7dd7babbac4deb72226319db0.bindPopup(popup_1e9b280fc4e74d5abb141651df8e7497)
+        ;
+
+        
+    
+    
+                marker_df287bf7dd7babbac4deb72226319db0.setIcon(icon_710ef9c5913d042eb7ba73a870934edd);
+            
+    
+            var marker_99b48a1f3eede6ccb7677942040e9809 = L.marker(
+                [60.3860688, 5.3001083],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_336ca73d966f7b9698ebfffe96bfa55c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2adaa0ddb93a0ae51136ae0cd0cf0b60 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ce2233b4e95203d564cccbc1a0131fea = $(`<div id="html_ce2233b4e95203d564cccbc1a0131fea" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="LaksevÃ¥g v/Kirkebukten" data-action="view_popup_generico" data-category="bicycle_rental"><b>LaksevÃ¥g v/Kirkebukten</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_2adaa0ddb93a0ae51136ae0cd0cf0b60.setContent(html_ce2233b4e95203d564cccbc1a0131fea);
+            
+        
+
+        marker_99b48a1f3eede6ccb7677942040e9809.bindPopup(popup_2adaa0ddb93a0ae51136ae0cd0cf0b60)
+        ;
+
+        
+    
+    
+                marker_99b48a1f3eede6ccb7677942040e9809.setIcon(icon_336ca73d966f7b9698ebfffe96bfa55c);
+            
+    
+            var marker_ea32cd639064918a3f818b1c3ca29a00 = L.marker(
+                [60.375176, 5.3512988],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_42bb456f8ad99867fad4342b89f7fd54 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_fcdeb8fcc2bc833acd5f0dc70427645d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e00aa94ee5746b89c7f7cd65a07a5f04 = $(`<div id="html_e00aa94ee5746b89c7f7cd65a07a5f04" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Ãrstad kirke" data-action="view_popup_generico" data-category="bicycle_rental"><b>Ãrstad kirke</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_fcdeb8fcc2bc833acd5f0dc70427645d.setContent(html_e00aa94ee5746b89c7f7cd65a07a5f04);
+            
+        
+
+        marker_ea32cd639064918a3f818b1c3ca29a00.bindPopup(popup_fcdeb8fcc2bc833acd5f0dc70427645d)
+        ;
+
+        
+    
+    
+                marker_ea32cd639064918a3f818b1c3ca29a00.setIcon(icon_42bb456f8ad99867fad4342b89f7fd54);
+            
+    
+            var marker_344728cbee1b1011ae969ae50f218551 = L.marker(
+                [60.3958923, 5.3252074],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_f9e856692332f5648fdf492282be1d21 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_834135620062e4d2283a9e59ce84b58f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_56b8453b2ff92e2e24576ed1a0bd2829 = $(`<div id="html_56b8453b2ff92e2e24576ed1a0bd2829" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Torget" data-action="view_popup_generico" data-category="bicycle_rental"><b>Torget</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_834135620062e4d2283a9e59ce84b58f.setContent(html_56b8453b2ff92e2e24576ed1a0bd2829);
+            
+        
+
+        marker_344728cbee1b1011ae969ae50f218551.bindPopup(popup_834135620062e4d2283a9e59ce84b58f)
+        ;
+
+        
+    
+    
+                marker_344728cbee1b1011ae969ae50f218551.setIcon(icon_f9e856692332f5648fdf492282be1d21);
+            
+    
+            var marker_d787bb9b85599db6cba080a9aba0805c = L.marker(
+                [60.3896418, 5.2865485],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_0190839e4b8032e77256124c07f749b1 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1233af40e6065fecbaff5478af55656a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6ddbda71d9f796ef0ba65caeaf0082f8 = $(`<div id="html_6ddbda71d9f796ef0ba65caeaf0082f8" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="LaksevÃ¥g Senter" data-action="view_popup_generico" data-category="bicycle_rental"><b>LaksevÃ¥g Senter</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_1233af40e6065fecbaff5478af55656a.setContent(html_6ddbda71d9f796ef0ba65caeaf0082f8);
+            
+        
+
+        marker_d787bb9b85599db6cba080a9aba0805c.bindPopup(popup_1233af40e6065fecbaff5478af55656a)
+        ;
+
+        
+    
+    
+                marker_d787bb9b85599db6cba080a9aba0805c.setIcon(icon_0190839e4b8032e77256124c07f749b1);
+            
+    
+            var marker_da004b633c7c0fecbd35d1d121c3aa63 = L.marker(
+                [60.379209, 5.361542],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_8e1cf8be7f965822f61a5e7594d66067 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_92c7aea495aae56bef38ff08ad44112c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e9b6d5b290e6d284221df55d0c42d175 = $(`<div id="html_e9b6d5b290e6d284221df55d0c42d175" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Haraldsplass" data-action="view_popup_generico" data-category="bicycle_rental"><b>Haraldsplass</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_92c7aea495aae56bef38ff08ad44112c.setContent(html_e9b6d5b290e6d284221df55d0c42d175);
+            
+        
+
+        marker_da004b633c7c0fecbd35d1d121c3aa63.bindPopup(popup_92c7aea495aae56bef38ff08ad44112c)
+        ;
+
+        
+    
+    
+                marker_da004b633c7c0fecbd35d1d121c3aa63.setIcon(icon_8e1cf8be7f965822f61a5e7594d66067);
+            
+    
+            var marker_7c498c7020f101112f2f87b3f7589381 = L.marker(
+                [60.3811246, 5.3590576],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_7c36e7c37788953443dd34e8a634beb5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c2419546091450ee14b61ab3810c20be = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5ce1fe7555bb4b77b44ff91d9b159d7c = $(`<div id="html_5ce1fe7555bb4b77b44ff91d9b159d7c" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Odontologen" data-action="view_popup_generico" data-category="bicycle_rental"><b>Odontologen</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_c2419546091450ee14b61ab3810c20be.setContent(html_5ce1fe7555bb4b77b44ff91d9b159d7c);
+            
+        
+
+        marker_7c498c7020f101112f2f87b3f7589381.bindPopup(popup_c2419546091450ee14b61ab3810c20be)
+        ;
+
+        
+    
+    
+                marker_7c498c7020f101112f2f87b3f7589381.setIcon(icon_7c36e7c37788953443dd34e8a634beb5);
+            
+    
+            var marker_c78cd5a8995228af6b773220d90b05d3 = L.marker(
+                [60.3930206, 5.326726],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_7ef8e50a91cb1c4665dbf02e886c9892 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_afdf2d1482dbee29eb663e13980cec4f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_f7bfa6cb8a2bb0a5f836d8f3cfb73483 = $(`<div id="html_f7bfa6cb8a2bb0a5f836d8f3cfb73483" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="SmÃ¥strandgaten" data-action="view_popup_generico" data-category="bicycle_rental"><b>SmÃ¥strandgaten</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_afdf2d1482dbee29eb663e13980cec4f.setContent(html_f7bfa6cb8a2bb0a5f836d8f3cfb73483);
+            
+        
+
+        marker_c78cd5a8995228af6b773220d90b05d3.bindPopup(popup_afdf2d1482dbee29eb663e13980cec4f)
+        ;
+
+        
+    
+    
+                marker_c78cd5a8995228af6b773220d90b05d3.setIcon(icon_7ef8e50a91cb1c4665dbf02e886c9892);
+            
+    
+            var marker_d6b1801c810382516852e97b8895c7be = L.marker(
+                [60.3922656, 5.3147424],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_869412131b2772fddd31fbd604cb4218 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_47329344aebd8192cb0f50830dead175 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_fec90e3850e407bd5d91f744ca1b9e11 = $(`<div id="html_fec90e3850e407bd5d91f744ca1b9e11" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="NÃ¸stetorget" data-action="view_popup_generico" data-category="bicycle_rental"><b>NÃ¸stetorget</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!</div></div>`)[0];
+                popup_47329344aebd8192cb0f50830dead175.setContent(html_fec90e3850e407bd5d91f744ca1b9e11);
+            
+        
+
+        marker_d6b1801c810382516852e97b8895c7be.bindPopup(popup_47329344aebd8192cb0f50830dead175)
+        ;
+
+        
+    
+    
+                marker_d6b1801c810382516852e97b8895c7be.setIcon(icon_869412131b2772fddd31fbd604cb4218);
+            
+    
+            var marker_5bdecefeb1410c8baf2eda3e03c1b4f5 = L.marker(
+                [60.4017274, 5.3168632],
+                {
+}
+            ).addTo(feature_group_c2d08db0c28f13287a3ac9d32876073f);
+        
+    
+            var icon_a0811ef70d94ef718865b0f0bb2fcb40 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "orange",
+  "iconColor": "white",
+  "icon": "bicycle",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_59be3e7fba9aa02fad49d74c7cbde268 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_90b898bf637ae76fc3f55aaa5605764a = $(`<div id="html_90b898bf637ae76fc3f55aaa5605764a" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Bergen Bike Rent" data-action="view_popup_generico" data-category="bicycle_rental"><b>Bergen Bike Rent</b><br><br>Public bicycle rental station. Choose sustainable mobility to explore the city!<br><br><a href='https://www.norwayactive.no/bergen-bike-rent/' target='_blank' data-name="Bergen Bike Rent" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_59be3e7fba9aa02fad49d74c7cbde268.setContent(html_90b898bf637ae76fc3f55aaa5605764a);
+            
+        
+
+        marker_5bdecefeb1410c8baf2eda3e03c1b4f5.bindPopup(popup_59be3e7fba9aa02fad49d74c7cbde268)
+        ;
+
+        
+    
+    
+                marker_5bdecefeb1410c8baf2eda3e03c1b4f5.setIcon(icon_a0811ef70d94ef718865b0f0bb2fcb40);
+            
+    
+            var feature_group_3d541b427cf710cbb18208f5556a26d8 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_63b726be053d1fa87e542fefc93de73e = L.marker(
+                [60.295045, 5.327555],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_b2edf5343c39d570125515fb74fb6684 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e5722802afff5bd522ab7e0d3bdd3b43 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_876de406a9999ac64c4a29be60d363b0 = $(`<div id="html_876de406a9999ac64c4a29be60d363b0" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Fretex Lagunen" data-action="view_popup_circolare" data-category="charity"><b>Fretex Lagunen</b><br><br>A local circular economy shop giving second life to pre-loved goods.<br><br><a href='https://www.fretex.no/handle/finn-butikk/fretex-lagunen/' target='_blank' data-name="Fretex Lagunen" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_e5722802afff5bd522ab7e0d3bdd3b43.setContent(html_876de406a9999ac64c4a29be60d363b0);
+            
+        
+
+        marker_63b726be053d1fa87e542fefc93de73e.bindPopup(popup_e5722802afff5bd522ab7e0d3bdd3b43)
+        ;
+
+        
+    
+    
+                marker_63b726be053d1fa87e542fefc93de73e.setIcon(icon_b2edf5343c39d570125515fb74fb6684);
+            
+    
+            var marker_4aae317305e175dcf972ddba1d0ef613 = L.marker(
+                [60.399174, 5.322427],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_d4734c8a1a1d64eceb34b8bd80ff08f5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3e569135c962244ae1fa593c08cbb552 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_21cfc97e5a54bc54c885c0be08d6ca19 = $(`<div id="html_21cfc97e5a54bc54c885c0be08d6ca19" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="NMS Gjenbruk Bergen" data-action="view_popup_circolare" data-category="charity"><b>NMS Gjenbruk Bergen</b><br><br>BesÃ¸k vÃ¥r fantastiske butikk â NMS Gjenbruk Bergen...<br><br><a href='https://www.nmsgjenbruk.no/butikkene-vare/bergen' target='_blank' data-name="NMS Gjenbruk Bergen" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_3e569135c962244ae1fa593c08cbb552.setContent(html_21cfc97e5a54bc54c885c0be08d6ca19);
+            
+        
+
+        marker_4aae317305e175dcf972ddba1d0ef613.bindPopup(popup_3e569135c962244ae1fa593c08cbb552)
+        ;
+
+        
+    
+    
+                marker_4aae317305e175dcf972ddba1d0ef613.setIcon(icon_d4734c8a1a1d64eceb34b8bd80ff08f5);
+            
+    
+            var marker_bbdd9e182a1e2966c80df9b836643bab = L.marker(
+                [60.388668, 5.330452],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_e84270ed753a62582b7a82e76c66e991 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_9ed2d0b85fa1d587bd55e29829f2eeba = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_58d7c259604f4a3f219d556f50319e9b = $(`<div id="html_58d7c259604f4a3f219d556f50319e9b" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Fretex Lars Hilles gate" data-action="view_popup_circolare" data-category="charity"><b>Fretex Lars Hilles gate</b><br><br>A local circular economy shop giving second life to pre-loved goods.<br><br><a href='https://www.fretex.no/handle/finn-butikk/fretex-lars-hillesgate/' target='_blank' data-name="Fretex Lars Hilles gate" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_9ed2d0b85fa1d587bd55e29829f2eeba.setContent(html_58d7c259604f4a3f219d556f50319e9b);
+            
+        
+
+        marker_bbdd9e182a1e2966c80df9b836643bab.bindPopup(popup_9ed2d0b85fa1d587bd55e29829f2eeba)
+        ;
+
+        
+    
+    
+                marker_bbdd9e182a1e2966c80df9b836643bab.setIcon(icon_e84270ed753a62582b7a82e76c66e991);
+            
+    
+            var marker_0162f9c4479133ae8b0f99fcc14530e3 = L.marker(
+                [60.3583782, 5.3674408],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_df7984a6ad16ac3fb2097bd228441152 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_21c78330dcfac2d7c7c6af8f12273092 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bfa7772cbe114cefa6983e84006866e8 = $(`<div id="html_bfa7772cbe114cefa6983e84006866e8" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Vel Bevart Bruktbutikk" data-action="view_popup_circolare" data-category="charity"><b>Vel Bevart Bruktbutikk</b><br><br>A local circular economy shop giving second life to pre-loved goods.</div></div>`)[0];
+                popup_21c78330dcfac2d7c7c6af8f12273092.setContent(html_bfa7772cbe114cefa6983e84006866e8);
+            
+        
+
+        marker_0162f9c4479133ae8b0f99fcc14530e3.bindPopup(popup_21c78330dcfac2d7c7c6af8f12273092)
+        ;
+
+        
+    
+    
+                marker_0162f9c4479133ae8b0f99fcc14530e3.setIcon(icon_df7984a6ad16ac3fb2097bd228441152);
+            
+    
+            var marker_6d3265a3cc57173b5196074b8428a32e = L.marker(
+                [60.4702124, 5.337481],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_0dcf80ef0050baf39b9b0589a3c1e4af = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d57bbfb53beb5fe60a42ee2908098c6f = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_86ddf32f2f15f5c5bbf2946014a260b8 = $(`<div id="html_86ddf32f2f15f5c5bbf2946014a260b8" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Fretex Ãsane" data-action="view_popup_circolare" data-category="charity"><b>Fretex Ãsane</b><br><br>A local circular economy shop giving second life to pre-loved goods.</div></div>`)[0];
+                popup_d57bbfb53beb5fe60a42ee2908098c6f.setContent(html_86ddf32f2f15f5c5bbf2946014a260b8);
+            
+        
+
+        marker_6d3265a3cc57173b5196074b8428a32e.bindPopup(popup_d57bbfb53beb5fe60a42ee2908098c6f)
+        ;
+
+        
+    
+    
+                marker_6d3265a3cc57173b5196074b8428a32e.setIcon(icon_0dcf80ef0050baf39b9b0589a3c1e4af);
+            
+    
+            var marker_0e187103e147fa05d3b74c2233a26200 = L.marker(
+                [60.3855342, 5.3182887],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_c339d8b726efa207359371e0ba9d4b90 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_da010162b3bee1e95decc50d232a5b03 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c0ccd3deca682a11a6b999f13863b31d = $(`<div id="html_c0ccd3deca682a11a6b999f13863b31d" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="MiljÃ¸markedet" data-action="view_popup_circolare" data-category="second_hand"><b>MiljÃ¸markedet</b><br><br>A local circular economy shop giving second life to pre-loved goods.</div></div>`)[0];
+                popup_da010162b3bee1e95decc50d232a5b03.setContent(html_c0ccd3deca682a11a6b999f13863b31d);
+            
+        
+
+        marker_0e187103e147fa05d3b74c2233a26200.bindPopup(popup_da010162b3bee1e95decc50d232a5b03)
+        ;
+
+        
+    
+    
+                marker_0e187103e147fa05d3b74c2233a26200.setIcon(icon_c339d8b726efa207359371e0ba9d4b90);
+            
+    
+            var marker_dc19eaae6eda968767f54e8737f2adf1 = L.marker(
+                [60.362588, 5.454787],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_9356d56304605db2dba8dfdf71f668f2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0e7f88b81a25c72a1c725b8e57159618 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_78d0044a6614b1ba786bfe415035d3e8 = $(`<div id="html_78d0044a6614b1ba786bfe415035d3e8" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Nlm Gjenbruk Bergen" data-action="view_popup_circolare" data-category="second_hand"><b>Nlm Gjenbruk Bergen</b><br><br>A local circular economy shop giving second life to pre-loved goods.</div></div>`)[0];
+                popup_0e7f88b81a25c72a1c725b8e57159618.setContent(html_78d0044a6614b1ba786bfe415035d3e8);
+            
+        
+
+        marker_dc19eaae6eda968767f54e8737f2adf1.bindPopup(popup_0e7f88b81a25c72a1c725b8e57159618)
+        ;
+
+        
+    
+    
+                marker_dc19eaae6eda968767f54e8737f2adf1.setIcon(icon_9356d56304605db2dba8dfdf71f668f2);
+            
+    
+            var marker_d9ebdb0ba5984410d69f438d7703bc4f = L.marker(
+                [60.3872358, 5.3288111],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_54d6525834856ecaa1cf32fa86bfa6bf = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_241fefd393b366fc968f53354b7ff1ee = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5c2aa9119deff8a5894b094f571ecf63 = $(`<div id="html_5c2aa9119deff8a5894b094f571ecf63" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="NygÃ¥rdsgaten Brukthandel" data-action="view_popup_circolare" data-category="second_hand"><b>NygÃ¥rdsgaten Brukthandel</b><br><br>A local circular economy shop giving second life to pre-loved goods.</div></div>`)[0];
+                popup_241fefd393b366fc968f53354b7ff1ee.setContent(html_5c2aa9119deff8a5894b094f571ecf63);
+            
+        
+
+        marker_d9ebdb0ba5984410d69f438d7703bc4f.bindPopup(popup_241fefd393b366fc968f53354b7ff1ee)
+        ;
+
+        
+    
+    
+                marker_d9ebdb0ba5984410d69f438d7703bc4f.setIcon(icon_54d6525834856ecaa1cf32fa86bfa6bf);
+            
+    
+            var marker_dfdb671ef07199c46ae2cfd1783bb5ea = L.marker(
+                [60.3751804, 5.3392101],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_b9aad287ce43021e4f7c32a057e2fb3a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_938411f03119b51d46541d086516af09 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ab7df8f4696c868c33dbbf698f68a773 = $(`<div id="html_ab7df8f4696c868c33dbbf698f68a773" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Mamilla Gjenbruk Bergen" data-action="view_popup_circolare" data-category="second_hand"><b>Mamilla Gjenbruk Bergen</b><br><br>Eg tek meg ein tur innom Mamilla Gjenbruk pÃ¥ Danmarksplass i Bergen. Dette er ein av tre gjenbruksbutikkar drive av frivillige for Israelsmisjonen. De...<br><br><a href='https://www.israelsmisjonen.no/norge/misjonsbutikken/mamilla' target='_blank' data-name="Mamilla Gjenbruk Bergen" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_938411f03119b51d46541d086516af09.setContent(html_ab7df8f4696c868c33dbbf698f68a773);
+            
+        
+
+        marker_dfdb671ef07199c46ae2cfd1783bb5ea.bindPopup(popup_938411f03119b51d46541d086516af09)
+        ;
+
+        
+    
+    
+                marker_dfdb671ef07199c46ae2cfd1783bb5ea.setIcon(icon_b9aad287ce43021e4f7c32a057e2fb3a);
+            
+    
+            var marker_8bc3f42997585d58264ec889dfdd7c19 = L.marker(
+                [60.3983224, 5.3264598],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_45675c4e4f05826e5893b5956cf33ac2 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5fa3a476264bd28684596467108bea5d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5b3a5f41942eaa24874dbb4ea2ad1d8c = $(`<div id="html_5b3a5f41942eaa24874dbb4ea2ad1d8c" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Divert" data-action="view_popup_circolare" data-category="second_hand"><b>Divert</b><br><br>Join 70M+ creators and sell, share & curate everything you do online. One bio linkâyour Linktreeâbrings it all together for your audience....<br><br><a href='https://linktr.ee' target='_blank' data-name="Divert" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_5fa3a476264bd28684596467108bea5d.setContent(html_5b3a5f41942eaa24874dbb4ea2ad1d8c);
+            
+        
+
+        marker_8bc3f42997585d58264ec889dfdd7c19.bindPopup(popup_5fa3a476264bd28684596467108bea5d)
+        ;
+
+        
+    
+    
+                marker_8bc3f42997585d58264ec889dfdd7c19.setIcon(icon_45675c4e4f05826e5893b5956cf33ac2);
+            
+    
+            var marker_0eb75e33563c8b44ca0301a1552f6adf = L.marker(
+                [60.3725143, 5.3447381],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_09866d1a755830537c98c3473d4d5f7b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_874c0cf26c02b475ac56ed1a3aa01a61 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c72f4caf792b4406df95dba2e118dbd5 = $(`<div id="html_c72f4caf792b4406df95dba2e118dbd5" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Galleri Normisjon Bergen" data-action="view_popup_circolare" data-category="second_hand"><b>Galleri Normisjon Bergen</b><br><br>A local circular economy shop giving second life to pre-loved goods.<br><br><a href='https://gallerinormisjon.no' target='_blank' data-name="Galleri Normisjon Bergen" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_874c0cf26c02b475ac56ed1a3aa01a61.setContent(html_c72f4caf792b4406df95dba2e118dbd5);
+            
+        
+
+        marker_0eb75e33563c8b44ca0301a1552f6adf.bindPopup(popup_874c0cf26c02b475ac56ed1a3aa01a61)
+        ;
+
+        
+    
+    
+                marker_0eb75e33563c8b44ca0301a1552f6adf.setIcon(icon_09866d1a755830537c98c3473d4d5f7b);
+            
+    
+            var marker_bd514ce306f07530725a2ea8735f3fb3 = L.marker(
+                [60.4743458, 5.3431823],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_ef7d7068329c4a7b0e9207fc79f5a2bf = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2954641def90a8fbfa3f172dc9b3c74d = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_21fb8e8065e07f4b263c15a15725fb72 = $(`<div id="html_21fb8e8065e07f4b263c15a15725fb72" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Skrotkisten" data-action="view_popup_circolare" data-category="second_hand"><b>Skrotkisten</b><br><br>A local circular economy shop giving second life to pre-loved goods.<br><br><a href='https://skrotkisten.no' target='_blank' data-name="Skrotkisten" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_2954641def90a8fbfa3f172dc9b3c74d.setContent(html_21fb8e8065e07f4b263c15a15725fb72);
+            
+        
+
+        marker_bd514ce306f07530725a2ea8735f3fb3.bindPopup(popup_2954641def90a8fbfa3f172dc9b3c74d)
+        ;
+
+        
+    
+    
+                marker_bd514ce306f07530725a2ea8735f3fb3.setIcon(icon_ef7d7068329c4a7b0e9207fc79f5a2bf);
+            
+    
+            var marker_9559374c62b9299adfcfec5e8eda2612 = L.marker(
+                [60.470403, 5.3346946],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_6b51d952cc997735f0a8121f3778e741 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_6a342fb5b517f3c8cae53c6bb90b53cf = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_819cdc731a7b292415563798b6fcc74a = $(`<div id="html_819cdc731a7b292415563798b6fcc74a" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Gjenbruken Bergen" data-action="view_popup_circolare" data-category="second_hand"><b>Gjenbruken Bergen</b><br><br>Gjenbruken â Oversikt over vÃ¥re bruktbutikker i Norge. Finn nÃ¦rmeste butikk og Ã¥pningstider....<br><br><a href='https://gjenbruken.no' target='_blank' data-name="Gjenbruken Bergen" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_6a342fb5b517f3c8cae53c6bb90b53cf.setContent(html_819cdc731a7b292415563798b6fcc74a);
+            
+        
+
+        marker_9559374c62b9299adfcfec5e8eda2612.bindPopup(popup_6a342fb5b517f3c8cae53c6bb90b53cf)
+        ;
+
+        
+    
+    
+                marker_9559374c62b9299adfcfec5e8eda2612.setIcon(icon_6b51d952cc997735f0a8121f3778e741);
+            
+    
+            var marker_ab3baa8b9f4b6b4de0bbf5b92141a4cb = L.marker(
+                [60.4658011, 5.3227049],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_81a010c4f94c3fc5816be6ad17e17a93 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c8dd18ec920cb176242dbb6c5aa951c5 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d0f20cd2d6301f023e02b05da0e506d8 = $(`<div id="html_d0f20cd2d6301f023e02b05da0e506d8" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="NMS Gjenbruk Ãsane" data-action="view_popup_circolare" data-category="second_hand"><b>NMS Gjenbruk Ãsane</b><br><br>Oppdag verdien av gjenbruk sammen med oss...<br><br><a href='https://nmsgjenbruk.no' target='_blank' data-name="NMS Gjenbruk Ãsane" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_c8dd18ec920cb176242dbb6c5aa951c5.setContent(html_d0f20cd2d6301f023e02b05da0e506d8);
+            
+        
+
+        marker_ab3baa8b9f4b6b4de0bbf5b92141a4cb.bindPopup(popup_c8dd18ec920cb176242dbb6c5aa951c5)
+        ;
+
+        
+    
+    
+                marker_ab3baa8b9f4b6b4de0bbf5b92141a4cb.setIcon(icon_81a010c4f94c3fc5816be6ad17e17a93);
+            
+    
+            var marker_8f4de3cd86a2b1214bd0744834626928 = L.marker(
+                [60.3958657, 5.3288405],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_5c844244c8cebc052d1e1b9380c3094c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_be696d7c3282f79da304a0bed2c23804 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_dc9cccbed95ac292f30dc865939ba30e = $(`<div id="html_dc9cccbed95ac292f30dc865939ba30e" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Schau Design" data-action="view_popup_circolare" data-category="second_hand"><b>Schau Design</b><br><br>A local circular economy shop giving second life to pre-loved goods.</div></div>`)[0];
+                popup_be696d7c3282f79da304a0bed2c23804.setContent(html_dc9cccbed95ac292f30dc865939ba30e);
+            
+        
+
+        marker_8f4de3cd86a2b1214bd0744834626928.bindPopup(popup_be696d7c3282f79da304a0bed2c23804)
+        ;
+
+        
+    
+    
+                marker_8f4de3cd86a2b1214bd0744834626928.setIcon(icon_5c844244c8cebc052d1e1b9380c3094c);
+            
+    
+            var marker_0afa683b0091f22cc26bedaa632e37af = L.marker(
+                [60.3498586, 5.2766967],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_f6989d7a5dc30af8295d3d1150530b33 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_84aa79354f91c92f8220e608db14cb69 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_08d3091a274f5c0c014c2667597ce4bf = $(`<div id="html_08d3091a274f5c0c014c2667597ce4bf" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Loppeliten" data-action="view_popup_circolare" data-category="second_hand"><b>Loppeliten</b><br><br>Loppeliten finner du  i Fyllingsdalen (Bergen), Lura (Sandnes) og Fana (Bergen). Her kan du selge og kjÃ¸pe barneklÃ¦r og utstyr. Enkelt for deg, godt f...<br><br><a href='https://www.loppeliten.no/' target='_blank' data-name="Loppeliten" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_84aa79354f91c92f8220e608db14cb69.setContent(html_08d3091a274f5c0c014c2667597ce4bf);
+            
+        
+
+        marker_0afa683b0091f22cc26bedaa632e37af.bindPopup(popup_84aa79354f91c92f8220e608db14cb69)
+        ;
+
+        
+    
+    
+                marker_0afa683b0091f22cc26bedaa632e37af.setIcon(icon_f6989d7a5dc30af8295d3d1150530b33);
+            
+    
+            var marker_be4652492928ada9be645476e7d9a535 = L.marker(
+                [60.353869, 5.2739775],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_f2bdff135ccef85e5ab8dfe3d848a60e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5025e3e5087b329399444d07acb4970b = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_e6eb810c52d5625bb1b8ef82843d1022 = $(`<div id="html_e6eb810c52d5625bb1b8ef82843d1022" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="ABC Gjenbruk" data-action="view_popup_circolare" data-category="second_hand"><b>ABC Gjenbruk</b><br><br>A local circular economy shop giving second life to pre-loved goods.<br><br><a href='https://www.abckontor.no/' target='_blank' data-name="ABC Gjenbruk" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_5025e3e5087b329399444d07acb4970b.setContent(html_e6eb810c52d5625bb1b8ef82843d1022);
+            
+        
+
+        marker_be4652492928ada9be645476e7d9a535.bindPopup(popup_5025e3e5087b329399444d07acb4970b)
+        ;
+
+        
+    
+    
+                marker_be4652492928ada9be645476e7d9a535.setIcon(icon_f2bdff135ccef85e5ab8dfe3d848a60e);
+            
+    
+            var marker_007f5bdbacc3e54cc47fc5ca27b340f3 = L.marker(
+                [60.3389188, 5.2460732],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_009cec018bbf2698ece2ba59fad08997 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5a3567ebed60574cdbd7e124f972de01 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_5acd7c7a0dc8c8cb66a19f488f1ef76e = $(`<div id="html_5acd7c7a0dc8c8cb66a19f488f1ef76e" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="ABC kontor" data-action="view_popup_circolare" data-category="second_hand"><b>ABC kontor</b><br><br>A local circular economy shop giving second life to pre-loved goods.<br><br><a href='https://www.abckontor.no/' target='_blank' data-name="ABC kontor" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_5a3567ebed60574cdbd7e124f972de01.setContent(html_5acd7c7a0dc8c8cb66a19f488f1ef76e);
+            
+        
+
+        marker_007f5bdbacc3e54cc47fc5ca27b340f3.bindPopup(popup_5a3567ebed60574cdbd7e124f972de01)
+        ;
+
+        
+    
+    
+                marker_007f5bdbacc3e54cc47fc5ca27b340f3.setIcon(icon_009cec018bbf2698ece2ba59fad08997);
+            
+    
+            var marker_d7b2cc853b4636d5e5a8566c3d2a806a = L.marker(
+                [60.3019452, 5.2879195],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_e4a8b810c31d4426240d69fc3ae0ba9e = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7976af717acf275786441808b114d572 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_01451459c0bf3e9cfd1ea88d85e45536 = $(`<div id="html_01451459c0bf3e9cfd1ea88d85e45536" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Bruktelektronikk AS" data-action="view_popup_circolare" data-category="second_hand"><b>Bruktelektronikk AS</b><br><br>Bruktelektronikk selger brukte og reparerte mobiler, nettbrett, pcer, spill konsoller med hovedfokus pÃ¥ apple produkter...<br><br><a href='https://www.bruktelektronikk.no/' target='_blank' data-name="Bruktelektronikk AS" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_7976af717acf275786441808b114d572.setContent(html_01451459c0bf3e9cfd1ea88d85e45536);
+            
+        
+
+        marker_d7b2cc853b4636d5e5a8566c3d2a806a.bindPopup(popup_7976af717acf275786441808b114d572)
+        ;
+
+        
+    
+    
+                marker_d7b2cc853b4636d5e5a8566c3d2a806a.setIcon(icon_e4a8b810c31d4426240d69fc3ae0ba9e);
+            
+    
+            var marker_ccee75e114c3d1085a4e02756d006c60 = L.marker(
+                [60.3802096, 5.318194],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_7955fe9edffa96aeda6ee68d4492be77 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0948f715def0d8d1102aa5f8814602ac = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_03b1020364557a1307aaf717a281ce49 = $(`<div id="html_03b1020364557a1307aaf717a281ce49" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Lisell&#39;s Brukt og Nytt" data-action="view_popup_circolare" data-category="second_hand"><b>Lisell's Brukt og Nytt</b><br><br>A local circular economy shop giving second life to pre-loved goods.</div></div>`)[0];
+                popup_0948f715def0d8d1102aa5f8814602ac.setContent(html_03b1020364557a1307aaf717a281ce49);
+            
+        
+
+        marker_ccee75e114c3d1085a4e02756d006c60.bindPopup(popup_0948f715def0d8d1102aa5f8814602ac)
+        ;
+
+        
+    
+    
+                marker_ccee75e114c3d1085a4e02756d006c60.setIcon(icon_7955fe9edffa96aeda6ee68d4492be77);
+            
+    
+            var marker_face1a6a6f7710b547403b25e4c1430a = L.marker(
+                [60.3851707, 5.3200351],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_e746ed5d2f4aaacae8a0859a5fbfc9cc = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_41a2e088887f8b22ba8289a9f4799da9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_521ad87d53912805d401a8c09cbbe8d4 = $(`<div id="html_521ad87d53912805d401a8c09cbbe8d4" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="MÃ¸llaren frivilligsentral" data-action="view_popup_circolare" data-category="second_hand"><b>MÃ¸llaren frivilligsentral</b><br><br>Vi trenger flere engasjerte frivillige!...<br><br><a href='https://mollaren.frivilligsentral.no/aktivitet?Id=8122' target='_blank' data-name="MÃ¸llaren frivilligsentral" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_41a2e088887f8b22ba8289a9f4799da9.setContent(html_521ad87d53912805d401a8c09cbbe8d4);
+            
+        
+
+        marker_face1a6a6f7710b547403b25e4c1430a.bindPopup(popup_41a2e088887f8b22ba8289a9f4799da9)
+        ;
+
+        
+    
+    
+                marker_face1a6a6f7710b547403b25e4c1430a.setIcon(icon_e746ed5d2f4aaacae8a0859a5fbfc9cc);
+            
+    
+            var marker_c3e251eae078e950ad134662faa61fdf = L.marker(
+                [60.3951, 5.3244],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_88d0cc33ad1e4abb08dd348f761a9c47 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_d42aa8d0567c64ba2ab4196fe16b0871 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_83db65ba229af7c58a63c7a678a98d8b = $(`<div id="html_83db65ba229af7c58a63c7a678a98d8b" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Fretex" data-action="view_popup_circolare" data-category="second_hand"><b>Fretex</b><br><br>Fretex is a chain of thrift stores run by the Salvation Army, offering a variety of second-hand items.</div></div>`)[0];
+                popup_d42aa8d0567c64ba2ab4196fe16b0871.setContent(html_83db65ba229af7c58a63c7a678a98d8b);
+            
+        
+
+        marker_c3e251eae078e950ad134662faa61fdf.bindPopup(popup_d42aa8d0567c64ba2ab4196fe16b0871)
+        ;
+
+        
+    
+    
+                marker_c3e251eae078e950ad134662faa61fdf.setIcon(icon_88d0cc33ad1e4abb08dd348f761a9c47);
+            
+    
+            var marker_47588b2538a0a829238ac6e83441cfc5 = L.marker(
+                [60.3929, 5.322],
+                {
+}
+            ).addTo(feature_group_3d541b427cf710cbb18208f5556a26d8);
+        
+    
+            var icon_e93589ed4f1cd1eee0e19f620933937b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "purple",
+  "iconColor": "white",
+  "icon": "shopping-bag",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1f892050b4a8bbf38a7f04db9b42ce8c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_d6e20ce798d7eff9eb1dfda4768e483d = $(`<div id="html_d6e20ce798d7eff9eb1dfda4768e483d" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="UFF" data-action="view_popup_circolare" data-category="second_hand"><b>UFF</b><br><br>UFF offers a wide range of vintage clothing, from retro to modern styles.</div></div>`)[0];
+                popup_1f892050b4a8bbf38a7f04db9b42ce8c.setContent(html_d6e20ce798d7eff9eb1dfda4768e483d);
+            
+        
+
+        marker_47588b2538a0a829238ac6e83441cfc5.bindPopup(popup_1f892050b4a8bbf38a7f04db9b42ce8c)
+        ;
+
+        
+    
+    
+                marker_47588b2538a0a829238ac6e83441cfc5.setIcon(icon_e93589ed4f1cd1eee0e19f620933937b);
+            
+    
+            feature_group_3d541b427cf710cbb18208f5556a26d8.addTo(map_473e2619f8fcd7428973500281544a1e);
+        
+    
+            var feature_group_01e6c4b9fe126958316cc7515fbc623e = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_6fe00d7d94f9664914bac349957ec10c = L.marker(
+                [60.392095, 5.322361],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_e2daf132d805c53692aac84c373e0989 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_eb92132a276087b72b7caabe0770d3a4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_548f55733cfb171087f2567e9b3c3425 = $(`<div id="html_548f55733cfb171087f2567e9b3c3425" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Råvarene" data-action="view_popup_generico" data-category="circular_economy"><b>Råvarene</b><br><br>Råvarene is Norway's first zero-waste grocery shop, offering a variety of food and household items in bulk to minimize waste.</div></div>`)[0];
+                popup_eb92132a276087b72b7caabe0770d3a4.setContent(html_548f55733cfb171087f2567e9b3c3425);
+            
+        
+
+        marker_6fe00d7d94f9664914bac349957ec10c.bindPopup(popup_eb92132a276087b72b7caabe0770d3a4)
+        ;
+
+        
+    
+    
+                marker_6fe00d7d94f9664914bac349957ec10c.setIcon(icon_e2daf132d805c53692aac84c373e0989);
+            
+    
+            var marker_70ee77da69fafb25e485f9c58a9e6349 = L.marker(
+                [60.39589, 5.32355],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_23426127f5445e86ef1a048c66ed8e15 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2157d13d579ed639d205ee296224fe25 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0e2c35132c170d7532146d6311056ba8 = $(`<div id="html_0e2c35132c170d7532146d6311056ba8" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Reindyrka" data-action="view_popup_generico" data-category="organic_rocery"><b>Reindyrka</b><br><br>An organic food store offering a good selection of fresh fruit and vegetables, along with various vegetarian and vegan products like beans, pasta, and snacks.</div></div>`)[0];
+                popup_2157d13d579ed639d205ee296224fe25.setContent(html_0e2c35132c170d7532146d6311056ba8);
+            
+        
+
+        marker_70ee77da69fafb25e485f9c58a9e6349.bindPopup(popup_2157d13d579ed639d205ee296224fe25)
+        ;
+
+        
+    
+    
+                marker_70ee77da69fafb25e485f9c58a9e6349.setIcon(icon_23426127f5445e86ef1a048c66ed8e15);
+            
+    
+            var marker_263bfca5c246135afb3f61b5d05726c8 = L.marker(
+                [60.39294, 5.32626],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_56aa6adf0a5fa7051c50b66c1a44e87a = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_b67dd79d6d97a0b27757b1a7eb6af2f4 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c1cce8d1a44949cdda7c875b2c36b5ba = $(`<div id="html_c1cce8d1a44949cdda7c875b2c36b5ba" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Kinsarvik Naturkost" data-action="view_popup_generico" data-category="organic_rocery"><b>Kinsarvik Naturkost</b><br><br>This shop sells a variety of vegan items, including chocolates, bars, biscuits, cheese, and tofu, as well as personal care products like shampoo and soaps.</div></div>`)[0];
+                popup_b67dd79d6d97a0b27757b1a7eb6af2f4.setContent(html_c1cce8d1a44949cdda7c875b2c36b5ba);
+            
+        
+
+        marker_263bfca5c246135afb3f61b5d05726c8.bindPopup(popup_b67dd79d6d97a0b27757b1a7eb6af2f4)
+        ;
+
+        
+    
+    
+                marker_263bfca5c246135afb3f61b5d05726c8.setIcon(icon_56aa6adf0a5fa7051c50b66c1a44e87a);
+            
+    
+            var marker_d62d6327f1345f7b8558a8b1d77fc341 = L.marker(
+                [60.296238, 5.330053],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_7059bd167b0b4193f47df5f1b92b2da7 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e6c3c10aed5235e4f361321eb14592bc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_0e30f296dd5c6de15c3dba5a38cad65c = $(`<div id="html_0e30f296dd5c6de15c3dba5a38cad65c" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Egon Lagunen" data-action="view_popup_ristorante" data-category="restaurant"><b>Egon Lagunen</b><br><br>PÃ¥ Egon restaurant hÃ¸rer alle hjemme. Vi har en bred og smakfull meny hvor alle finner noe de liker. Velkommen!...<br><br><a href='https://www.egon.no/' target='_blank' data-name="Egon Lagunen" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_e6c3c10aed5235e4f361321eb14592bc.setContent(html_0e30f296dd5c6de15c3dba5a38cad65c);
+            
+        
+
+        marker_d62d6327f1345f7b8558a8b1d77fc341.bindPopup(popup_e6c3c10aed5235e4f361321eb14592bc)
+        ;
+
+        
+    
+    
+                marker_d62d6327f1345f7b8558a8b1d77fc341.setIcon(icon_7059bd167b0b4193f47df5f1b92b2da7);
+            
+    
+            var marker_9154dc17defa39f6085eb30a84d9a34c = L.marker(
+                [60.39056, 5.319216],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_514e2b43ca36d918ad8c844e581462c0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_fe145bb55d278aefcefceff4e5d3d665 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_bd435d24460881bbd64a1dcb424cd774 = $(`<div id="html_bd435d24460881bbd64a1dcb424cd774" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Namastey" data-action="view_popup_ristorante" data-category="restaurant"><b>Namastey</b><br><br>A sustainable food spot prioritizing local, organic, or plant-based ingredients.</div></div>`)[0];
+                popup_fe145bb55d278aefcefceff4e5d3d665.setContent(html_bd435d24460881bbd64a1dcb424cd774);
+            
+        
+
+        marker_9154dc17defa39f6085eb30a84d9a34c.bindPopup(popup_fe145bb55d278aefcefceff4e5d3d665)
+        ;
+
+        
+    
+    
+                marker_9154dc17defa39f6085eb30a84d9a34c.setIcon(icon_514e2b43ca36d918ad8c844e581462c0);
+            
+    
+            var marker_3c0f7d700cd44a0aaf36a158a0bfec3e = L.marker(
+                [60.393589, 5.324198],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_f6829a5554fd1219267e4c36f7001cd0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a2613e1b514e106091f0cd03ddb70731 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c2efa4eea836717f85af0d5b7ba2bec0 = $(`<div id="html_c2efa4eea836717f85af0d5b7ba2bec0" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="China Palace" data-action="view_popup_ristorante" data-category="restaurant"><b>China Palace</b><br><br>A sustainable food spot prioritizing local, organic, or plant-based ingredients.<br><br><a href='https://chinapalacerestaurant.no/' target='_blank' data-name="China Palace" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_a2613e1b514e106091f0cd03ddb70731.setContent(html_c2efa4eea836717f85af0d5b7ba2bec0);
+            
+        
+
+        marker_3c0f7d700cd44a0aaf36a158a0bfec3e.bindPopup(popup_a2613e1b514e106091f0cd03ddb70731)
+        ;
+
+        
+    
+    
+                marker_3c0f7d700cd44a0aaf36a158a0bfec3e.setIcon(icon_f6829a5554fd1219267e4c36f7001cd0);
+            
+    
+            var marker_b762755ce90b05e912ae6c518a9bca45 = L.marker(
+                [60.379124, 5.325928],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_9f2f66744e499d77d9e4e610276fe10d = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_aa1bff5b91db94aad963500cf7bdd638 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_08520ca353963248e787f89f881811e4 = $(`<div id="html_08520ca353963248e787f89f881811e4" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Pizzabakeren Solheimsviken" data-action="view_popup_ristorante" data-category="restaurant"><b>Pizzabakeren Solheimsviken</b><br><br>A sustainable food spot prioritizing local, organic, or plant-based ingredients.</div></div>`)[0];
+                popup_aa1bff5b91db94aad963500cf7bdd638.setContent(html_08520ca353963248e787f89f881811e4);
+            
+        
+
+        marker_b762755ce90b05e912ae6c518a9bca45.bindPopup(popup_aa1bff5b91db94aad963500cf7bdd638)
+        ;
+
+        
+    
+    
+                marker_b762755ce90b05e912ae6c518a9bca45.setIcon(icon_9f2f66744e499d77d9e4e610276fe10d);
+            
+    
+            var marker_15098fc849e2d51626d2454f9ec376f3 = L.marker(
+                [60.3909569, 5.3317069],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_67f5ac15c37fd622ba13ee37d046cb84 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3b8757dd792885a40802f7748b26b91c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_65e161b47380fbbf5d4146a2a6d9b593 = $(`<div id="html_65e161b47380fbbf5d4146a2a6d9b593" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Moon" data-action="view_popup_ristorante" data-category="restaurant"><b>Moon</b><br><br>A sustainable food spot prioritizing local, organic, or plant-based ingredients.<br><br><a href='https://www.moonrestaurantbergen.com' target='_blank' data-name="Moon" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_3b8757dd792885a40802f7748b26b91c.setContent(html_65e161b47380fbbf5d4146a2a6d9b593);
+            
+        
+
+        marker_15098fc849e2d51626d2454f9ec376f3.bindPopup(popup_3b8757dd792885a40802f7748b26b91c)
+        ;
+
+        
+    
+    
+                marker_15098fc849e2d51626d2454f9ec376f3.setIcon(icon_67f5ac15c37fd622ba13ee37d046cb84);
+            
+    
+            var marker_4d24ebfcf8a1a953f9127031d34b300d = L.marker(
+                [60.361785, 5.351627],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_d284076af459186d8b8a08ddca6d85e5 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_17ec93169c7c02d594d91d524ababa82 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c932abee4e85074061f602057a31bdcf = $(`<div id="html_c932abee4e85074061f602057a31bdcf" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="NawabS" data-action="view_popup_ristorante" data-category="restaurant"><b>NawabS</b><br><br>A sustainable food spot prioritizing local, organic, or plant-based ingredients.</div></div>`)[0];
+                popup_17ec93169c7c02d594d91d524ababa82.setContent(html_c932abee4e85074061f602057a31bdcf);
+            
+        
+
+        marker_4d24ebfcf8a1a953f9127031d34b300d.bindPopup(popup_17ec93169c7c02d594d91d524ababa82)
+        ;
+
+        
+    
+    
+                marker_4d24ebfcf8a1a953f9127031d34b300d.setIcon(icon_d284076af459186d8b8a08ddca6d85e5);
+            
+    
+            var marker_eb08f3e69891e87c4f626a100c7ecbef = L.marker(
+                [60.3887887, 5.2900839],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_685cc728f29b61f784f21d1f7faae22b = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_87d82c1d9e71ecc1abb3dd1797064cc9 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_a0655bac4eae69cea841567eecb11c53 = $(`<div id="html_a0655bac4eae69cea841567eecb11c53" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Naka Take Away" data-action="view_popup_ristorante" data-category="restaurant"><b>Naka Take Away</b><br><br>A sustainable food spot prioritizing local, organic, or plant-based ingredients.<br><br><a href='https://nakatakeaway.com/' target='_blank' data-name="Naka Take Away" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_87d82c1d9e71ecc1abb3dd1797064cc9.setContent(html_a0655bac4eae69cea841567eecb11c53);
+            
+        
+
+        marker_eb08f3e69891e87c4f626a100c7ecbef.bindPopup(popup_87d82c1d9e71ecc1abb3dd1797064cc9)
+        ;
+
+        
+    
+    
+                marker_eb08f3e69891e87c4f626a100c7ecbef.setIcon(icon_685cc728f29b61f784f21d1f7faae22b);
+            
+    
+            var marker_33789dc2db46831951e7e0d3771d1dfc = L.marker(
+                [60.3949306, 5.3260806],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_38144cb62e41b980e5a6c0ef893cd334 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_a9815e12757b7ac19b6e52076f1dbe16 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_879a8364cbe6a8f3a67a8bc5f9c845f9 = $(`<div id="html_879a8364cbe6a8f3a67a8bc5f9c845f9" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Leela" data-action="view_popup_ristorante" data-category="restaurant"><b>Leela</b><br><br>A sustainable food spot prioritizing local, organic, or plant-based ingredients.</div></div>`)[0];
+                popup_a9815e12757b7ac19b6e52076f1dbe16.setContent(html_879a8364cbe6a8f3a67a8bc5f9c845f9);
+            
+        
+
+        marker_33789dc2db46831951e7e0d3771d1dfc.bindPopup(popup_a9815e12757b7ac19b6e52076f1dbe16)
+        ;
+
+        
+    
+    
+                marker_33789dc2db46831951e7e0d3771d1dfc.setIcon(icon_38144cb62e41b980e5a6c0ef893cd334);
+            
+    
+            var marker_73f8b06ff9b14f6b22f37d54a58967cc = L.marker(
+                [60.392944, 5.321303],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_42b41dbc202694efb6d95f0d9a6b4e7c = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_0e00846c4b1e6eefd322f9d6bcf26540 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_77fc40aeafe2c498157c447f39071f46 = $(`<div id="html_77fc40aeafe2c498157c447f39071f46" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Daily Pot" data-action="view_popup_ristorante" data-category="restaurant"><b>Daily Pot</b><br>📍 <i>Vaskerelven 21, 5014 Bergen, Norway</i><br><br>Daily Pot is a highly-rated restaurant in Bergen, known for its healthy options, including soups. It is frequently mentioned as a top vegan/vegetarian-friendly establishment.<br><br><a href='dailypot.no' target='_blank' data-name="Daily Pot" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_0e00846c4b1e6eefd322f9d6bcf26540.setContent(html_77fc40aeafe2c498157c447f39071f46);
+            
+        
+
+        marker_73f8b06ff9b14f6b22f37d54a58967cc.bindPopup(popup_0e00846c4b1e6eefd322f9d6bcf26540)
+        ;
+
+        
+    
+    
+                marker_73f8b06ff9b14f6b22f37d54a58967cc.setIcon(icon_42b41dbc202694efb6d95f0d9a6b4e7c);
+            
+    
+            var marker_78951855d67cdc47a154ac1fba5a9280 = L.marker(
+                [60.39276, 5.32353],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_e2f24eca2f90a2635b75d179ecf2057f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3c18329ad172b4074b137ecd7bfdba37 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_019d48fb5db1dcfede2712c5c306385e = $(`<div id="html_019d48fb5db1dcfede2712c5c306385e" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Løvetann Café & Bistro" data-action="view_popup_ristorante" data-category="restaurant"><b>Løvetann Café & Bistro</b><br>📍 <i>Klosteret 16, 5005 Bergen,Norway</i><br><br>Løvetann Café & Bistro is a well-regarded cafe and bistro in Bergen, offering vegetarian and vegan-friendly options. It frequently appears in lists of top places for plant-based meals.<br><br><a href='lovetanncafe.com' target='_blank' data-name="Løvetann Café & Bistro" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_3c18329ad172b4074b137ecd7bfdba37.setContent(html_019d48fb5db1dcfede2712c5c306385e);
+            
+        
+
+        marker_78951855d67cdc47a154ac1fba5a9280.bindPopup(popup_3c18329ad172b4074b137ecd7bfdba37)
+        ;
+
+        
+    
+    
+                marker_78951855d67cdc47a154ac1fba5a9280.setIcon(icon_e2f24eca2f90a2635b75d179ecf2057f);
+            
+    
+            var marker_12fda1f3ebd2b44f2b229b24920eaa25 = L.marker(
+                [60.392944, 5.321303],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_2cfe277e207668b02075ae1ffd617c28 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_1adbe4e7e6345137e4b3023e3abcb29a = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_c431ade1cb13ede4ee92f5a1f2bfe48a = $(`<div id="html_c431ade1cb13ede4ee92f5a1f2bfe48a" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Horn Of Africa" data-action="view_popup_ristorante" data-category="restaurant"><b>Horn Of Africa</b><br>📍 <i>Strandgaten 212, 5004 Bergen, Norway</i><br><br>Horn Of Africa is a restaurant in Bergen that offers options suitable for vegetarians and vegans. It is recognized for its plant-based friendly menu.<br><br><a href='hornofafrica.no' target='_blank' data-name="Horn Of Africa" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_1adbe4e7e6345137e4b3023e3abcb29a.setContent(html_c431ade1cb13ede4ee92f5a1f2bfe48a);
+            
+        
+
+        marker_12fda1f3ebd2b44f2b229b24920eaa25.bindPopup(popup_1adbe4e7e6345137e4b3023e3abcb29a)
+        ;
+
+        
+    
+    
+                marker_12fda1f3ebd2b44f2b229b24920eaa25.setIcon(icon_2cfe277e207668b02075ae1ffd617c28);
+            
+    
+            var marker_02b2c41e2a2d8cda7cc5de406b685ee1 = L.marker(
+                [60.3957, 5.3235],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_adf631da1d194a5a9207652621c1beec = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_e2a8a215ec9fb1ce94f9d133731e3a3c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_68df059d8424b87ce41250b7c94f4e19 = $(`<div id="html_68df059d8424b87ce41250b7c94f4e19" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Pingvinen" data-action="view_popup_ristorante" data-category="restaurant"><b>Pingvinen</b><br>📍 <i>Vaskerelven 14, 5014 Bergen, Norway</i><br><br>Pingvinen is a popular restaurant in Bergen, noted for offering vegan-friendly choices among its dishes. It's often included in lists of top vegan spots.<br><br><a href='portal.gastroplanner.no' target='_blank' data-name="Pingvinen" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_e2a8a215ec9fb1ce94f9d133731e3a3c.setContent(html_68df059d8424b87ce41250b7c94f4e19);
+            
+        
+
+        marker_02b2c41e2a2d8cda7cc5de406b685ee1.bindPopup(popup_e2a8a215ec9fb1ce94f9d133731e3a3c)
+        ;
+
+        
+    
+    
+                marker_02b2c41e2a2d8cda7cc5de406b685ee1.setIcon(icon_adf631da1d194a5a9207652621c1beec);
+            
+    
+            var marker_7cf130aff18ab99af83b9e656a9eab44 = L.marker(
+                [60.392944, 5.321303],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_00b8ea3e7c402a4f3e66868e4269c8c3 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_5fbab6e5be48dc3d3b60150344079919 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_295cdceabbb27414a5ca2bc111bb8486 = $(`<div id="html_295cdceabbb27414a5ca2bc111bb8486" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Dirty V - Bergen" data-action="view_popup_ristorante" data-category="restaurant"><b>Dirty V - Bergen</b><br>📍 <i>Nøstegaten 81, 5011 Bergen, Norway</i><br><br>Dirty V - Bergen is a dedicated vegan establishment in Bergen, offering a fully plant-based menu. It is frequently listed as a key vegan destination in the city.<br><br><a href='dirtyv.no' target='_blank' data-name="Dirty V - Bergen" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_5fbab6e5be48dc3d3b60150344079919.setContent(html_295cdceabbb27414a5ca2bc111bb8486);
+            
+        
+
+        marker_7cf130aff18ab99af83b9e656a9eab44.bindPopup(popup_5fbab6e5be48dc3d3b60150344079919)
+        ;
+
+        
+    
+    
+                marker_7cf130aff18ab99af83b9e656a9eab44.setIcon(icon_00b8ea3e7c402a4f3e66868e4269c8c3);
+            
+    
+            var marker_96ceae4bb8556c7556ee193a839130e0 = L.marker(
+                [60.392944, 5.321303],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_320f6fca2507615189654b65b4023c42 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_45612de9bc4f18179deb68fe10c5e5c2 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_cbafbc7a9a950ad133f094e8f7512308 = $(`<div id="html_cbafbc7a9a950ad133f094e8f7512308" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Angry Bite" data-action="view_popup_ristorante" data-category="restaurant"><b>Angry Bite</b><br>📍 <i>Nygaten 6, 5017 Bergen, Norway</i><br><br>Angry Bite is a restaurant in Bergen known for its vegetarian and vegan-friendly offerings. It caters to those seeking plant-based meal options.</div></div>`)[0];
+                popup_45612de9bc4f18179deb68fe10c5e5c2.setContent(html_cbafbc7a9a950ad133f094e8f7512308);
+            
+        
+
+        marker_96ceae4bb8556c7556ee193a839130e0.bindPopup(popup_45612de9bc4f18179deb68fe10c5e5c2)
+        ;
+
+        
+    
+    
+                marker_96ceae4bb8556c7556ee193a839130e0.setIcon(icon_320f6fca2507615189654b65b4023c42);
+            
+    
+            var marker_0483151eb1fbea8a611113f0cfcd1d1f = L.marker(
+                [60.392944, 5.321303],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_de238a6b0c9487b5e891c994e8b3f1c4 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4a304b996edb98ada84716c27348e6db = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_cffc25b28663dbbd82c8d6f0d7e4588b = $(`<div id="html_cffc25b28663dbbd82c8d6f0d7e4588b" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Banzha" data-action="view_popup_ristorante" data-category="restaurant"><b>Banzha</b><br>📍 <i>Neumanns gate 28, 5015 Bergen, Norway</i><br><br>Banzha is a chinese restaurant in center of Bergen that offers vegetarian and vegan-friendly dishes on its menu. It is often cited as a good option for plant-based dining.<br><br><a href='banzha.no' target='_blank' data-name="Banzha" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_4a304b996edb98ada84716c27348e6db.setContent(html_cffc25b28663dbbd82c8d6f0d7e4588b);
+            
+        
+
+        marker_0483151eb1fbea8a611113f0cfcd1d1f.bindPopup(popup_4a304b996edb98ada84716c27348e6db)
+        ;
+
+        
+    
+    
+                marker_0483151eb1fbea8a611113f0cfcd1d1f.setIcon(icon_de238a6b0c9487b5e891c994e8b3f1c4);
+            
+    
+            var marker_1ebb6ba898358f526e07b3651df02059 = L.marker(
+                [60.392944, 5.321303],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_ce707536b440cf9361659a66063302fc = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2c1943573b2faecab6d02e31ad5dabf3 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_ca8bf2e29f7514693f189ecb41f403fc = $(`<div id="html_ca8bf2e29f7514693f189ecb41f403fc" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Deli" data-action="view_popup_ristorante" data-category="restaurant"><b>Deli</b><br><br>Deli is a food establishment in Bergen that offers a selection of vegetarian and vegan-friendly items. It's known for providing options for plant-based diets.</div></div>`)[0];
+                popup_2c1943573b2faecab6d02e31ad5dabf3.setContent(html_ca8bf2e29f7514693f189ecb41f403fc);
+            
+        
+
+        marker_1ebb6ba898358f526e07b3651df02059.bindPopup(popup_2c1943573b2faecab6d02e31ad5dabf3)
+        ;
+
+        
+    
+    
+                marker_1ebb6ba898358f526e07b3651df02059.setIcon(icon_ce707536b440cf9361659a66063302fc);
+            
+    
+            var marker_22d4ea0681e93d7b07bf1a101ad33d73 = L.marker(
+                [60.3965, 5.3255],
+                {
+}
+            ).addTo(feature_group_01e6c4b9fe126958316cc7515fbc623e);
+        
+    
+            var icon_61a44d67d01447e5d9b284c9a752d7ff = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "green",
+  "iconColor": "white",
+  "icon": "leaf",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_7cfc014f80ea6fef812c384c73a26d0e = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_611a2566e5894fbaf840b892cff78dc3 = $(`<div id="html_611a2566e5894fbaf840b892cff78dc3" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Pygmalion" data-action="view_popup_ristorante" data-category="restaurant"><b>Pygmalion</b><br><br>Pygmalion is a centrally located ecological and vegetarian-focused restaurant in Bergen, known for its safe and dedicated plant-based offerings. It's a key spot for vegetarian and vegan dining in the city center near Torget.<br><br><a href='https://www.pygmalion.no/' target='_blank' data-name="Pygmalion" onclick="window.parent.gtag('event', 'click_sito_web', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_7cfc014f80ea6fef812c384c73a26d0e.setContent(html_611a2566e5894fbaf840b892cff78dc3);
+            
+        
+
+        marker_22d4ea0681e93d7b07bf1a101ad33d73.bindPopup(popup_7cfc014f80ea6fef812c384c73a26d0e)
+        ;
+
+        
+    
+    
+                marker_22d4ea0681e93d7b07bf1a101ad33d73.setIcon(icon_61a44d67d01447e5d9b284c9a752d7ff);
+            
+    
+            feature_group_01e6c4b9fe126958316cc7515fbc623e.addTo(map_473e2619f8fcd7428973500281544a1e);
+        
+    
+            var feature_group_d73b8051a2029e30f8debded1154fa15 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            feature_group_d73b8051a2029e30f8debded1154fa15.addTo(map_473e2619f8fcd7428973500281544a1e);
+        
+    
+            var feature_group_db9e7d0a60979911492166d72a06f165 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            feature_group_db9e7d0a60979911492166d72a06f165.addTo(map_473e2619f8fcd7428973500281544a1e);
+        
+    
+            var feature_group_12d84b99b8280c1c308dbf22284ff355 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_08921b1b144dbd116d9b9f8dcb51d54d = L.marker(
+                [60.38659706, 5.301977382],
+                {
+}
+            ).addTo(feature_group_12d84b99b8280c1c308dbf22284ff355);
+        
+    
+            var icon_0d9c8aed3ddda59901442f8a201286ab = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_3d4ee88bfedfa8e7b5d0fcc4d6bda05c = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_3311acdd5612c02c0be0f82342211580 = $(`<div id="html_3311acdd5612c02c0be0f82342211580" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Damsgårdsdagene" data-action="view_popup_evento" data-category="Event"><b>Damsgårdsdagene</b><br>📍 <i>Damsgårdsveien 175, 5160, Laksevåg</i><br>📅 <b>May 29, 2026 - Jun 07, 2026</b><br><br>An annual event where local teams, associations, and organizations in Laksevåg district showcase their activities for childre, youth and adults<br><br><a href='damsgardsdagene.no' target='_blank' data-name="Damsgårdsdagene" onclick="window.parent.gtag('event', 'click_evento_sponsor', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_3d4ee88bfedfa8e7b5d0fcc4d6bda05c.setContent(html_3311acdd5612c02c0be0f82342211580);
+            
+        
+
+        marker_08921b1b144dbd116d9b9f8dcb51d54d.bindPopup(popup_3d4ee88bfedfa8e7b5d0fcc4d6bda05c)
+        ;
+
+        
+    
+    
+                marker_08921b1b144dbd116d9b9f8dcb51d54d.setIcon(icon_0d9c8aed3ddda59901442f8a201286ab);
+            
+    
+            var marker_77e395da193ece8b251f7bc104930b19 = L.marker(
+                [60.37932307981253, 5.333296395755303],
+                {
+}
+            ).addTo(feature_group_12d84b99b8280c1c308dbf22284ff355);
+        
+    
+            var icon_f8aed6f607832afc43011c3ef4638f8f = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_4592bcad40f456d06971302e0068dc54 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_350d847298778a5f76d1c44e7835b678 = $(`<div id="html_350d847298778a5f76d1c44e7835b678" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Bergen Pride" data-action="view_popup_evento" data-category="Event"><b>Bergen Pride</b><br>📍 <i>Bryggen 19, 5003 Bergen</i><br>📅 <b>Jun 06, 2026</b><br>🕒 <b>13:00</b><br><br>Join us on the 6th of June where thousands of people come together for the annual pride parade in Bergen.<br><br><a href='https://www.bergenpride.no/parade/' target='_blank' data-name="Bergen Pride" onclick="window.parent.gtag('event', 'click_evento_sponsor', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_4592bcad40f456d06971302e0068dc54.setContent(html_350d847298778a5f76d1c44e7835b678);
+            
+        
+
+        marker_77e395da193ece8b251f7bc104930b19.bindPopup(popup_4592bcad40f456d06971302e0068dc54)
+        ;
+
+        
+    
+    
+                marker_77e395da193ece8b251f7bc104930b19.setIcon(icon_f8aed6f607832afc43011c3ef4638f8f);
+            
+    
+            feature_group_12d84b99b8280c1c308dbf22284ff355.addTo(map_473e2619f8fcd7428973500281544a1e);
+        
+    
+            var feature_group_4f06be8f2e8177d66cda0ea0c10d30ca = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_677b14d42271cddab116be453db61456 = L.marker(
+                [60.38659706, 5.301977382],
+                {
+}
+            ).addTo(feature_group_4f06be8f2e8177d66cda0ea0c10d30ca);
+        
+    
+            var icon_900532cfa494a60f07086a4afab24fa0 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_fa8c48094bca8bae1fc04501e1e067fc = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_07e38b99ea3d2fe9365d1c367ecc5a5a = $(`<div id="html_07e38b99ea3d2fe9365d1c367ecc5a5a" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Damsgårdsdagene" data-action="view_popup_evento" data-category="Event"><b>Damsgårdsdagene</b><br>📍 <i>Damsgårdsveien 175, 5160, Laksevåg</i><br>📅 <b>May 29, 2026 - Jun 07, 2026</b><br><br>An annual event where local teams, associations, and organizations in Laksevåg district showcase their activities for childre, youth and adults<br><br><a href='damsgardsdagene.no' target='_blank' data-name="Damsgårdsdagene" onclick="window.parent.gtag('event', 'click_evento_sponsor', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_fa8c48094bca8bae1fc04501e1e067fc.setContent(html_07e38b99ea3d2fe9365d1c367ecc5a5a);
+            
+        
+
+        marker_677b14d42271cddab116be453db61456.bindPopup(popup_fa8c48094bca8bae1fc04501e1e067fc)
+        ;
+
+        
+    
+    
+                marker_677b14d42271cddab116be453db61456.setIcon(icon_900532cfa494a60f07086a4afab24fa0);
+            
+    
+            var marker_a035170ce3a1f288f95c881011663935 = L.marker(
+                [60.38580469, 5.324937769],
+                {
+}
+            ).addTo(feature_group_4f06be8f2e8177d66cda0ea0c10d30ca);
+        
+    
+            var icon_657418195a37416b98d263dce13c0b56 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_c415c9feb67c625145e241013db5d368 = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_352a2d52e76f2d8dd7626108eaf8333c = $(`<div id="html_352a2d52e76f2d8dd7626108eaf8333c" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="The Tunnel Ride" data-action="view_popup_evento" data-category="Event"><b>The Tunnel Ride</b><br>📍 <i>Nygårdsparken, øvre del, 5006 Bergen</i><br>📅 <b>Jun 07, 2026</b><br>🕒 <b>10:00</b><br><br>Join a unique, family friendly cycling event in Bergen: the ride takes cyclists of all ages on a scenic and safe route between Fyllingsdalen Stadium and Nygårdsparken, showcasing how easy and enjoyable it is to cycle between Bergen's neighbourhoods<br><br><a href='https://en.visitbergen.com/whats-on/the-tunnel-ride-p8444283' target='_blank' data-name="The Tunnel Ride" onclick="window.parent.gtag('event', 'click_evento_sponsor', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_c415c9feb67c625145e241013db5d368.setContent(html_352a2d52e76f2d8dd7626108eaf8333c);
+            
+        
+
+        marker_a035170ce3a1f288f95c881011663935.bindPopup(popup_c415c9feb67c625145e241013db5d368)
+        ;
+
+        
+    
+    
+                marker_a035170ce3a1f288f95c881011663935.setIcon(icon_657418195a37416b98d263dce13c0b56);
+            
+    
+            var feature_group_31905abef636ce9cad9c9d9e21f4f914 = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var feature_group_21ef4d9690791584f7967aab39c1877d = L.featureGroup(
+                {
+}
+            );
+        
+    
+            var marker_5208337ec6b85e6eb38819c48e3c7de9 = L.marker(
+                [60.53416624, 5.257352227],
+                {
+}
+            ).addTo(feature_group_21ef4d9690791584f7967aab39c1877d);
+        
+    
+            var icon_2398258272c198e435a5b4dc2cb8b259 = L.AwesomeMarkers.icon(
+                {
+  "markerColor": "red",
+  "iconColor": "white",
+  "icon": "star",
+  "prefix": "fa",
+  "extraClasses": "fa-rotate-0",
+}
+            );
+        
+    
+        var popup_2736ecf3258abec11b42583120f564ac = L.popup({
+  "maxWidth": 300,
+});
+
+        
+            
+                var html_6180d0019c0900fcdd98061d36b71d6d = $(`<div id="html_6180d0019c0900fcdd98061d36b71d6d" style="width: 100.0%; height: 100.0%;"><div class='track-pin' data-name="Familiens Sommerkonsert" data-action="view_popup_evento" data-category="Event"><b>Familiens Sommerkonsert</b><br>📍 <i>Flatøyvegen 22, 5918 Frekhaug</i><br>📅 <b>Jun 21, 2026</b><br>🕒 <b>17:00 - 23:00</b><br><br>Join us for the Family Summer Concert in the beautiful Kulturboden at Flatøy  a wonderful way to start the summer! <br><br><a href='https://en.visitbergen.com/whats-on/familiens-sommerkonsert-p8466443' target='_blank' data-name="Familiens Sommerkonsert" onclick="window.parent.gtag('event', 'click_evento_sponsor', {'nome_realta': this.getAttribute('data-name')})">Visit Link</a></div></div>`)[0];
+                popup_2736ecf3258abec11b42583120f564ac.setContent(html_6180d0019c0900fcdd98061d36b71d6d);
+            
+        
+
+        marker_5208337ec6b85e6eb38819c48e3c7de9.bindPopup(popup_2736ecf3258abec11b42583120f564ac)
+        ;
+
+        
+    
+    
+                marker_5208337ec6b85e6eb38819c48e3c7de9.setIcon(icon_2398258272c198e435a5b4dc2cb8b259);
+            
+    
+            var layer_control_dde8d6f5f1773c998ccccc30ac1b8fea_layers = {
+                base_layers : {
+                    "cartodbpositron" : tile_layer_3e26747366a58ae45bccd7d76af64480,
+                },
+                overlays :  {
+                    "\ud83d\udca7 Free Water Fountains" : feature_group_01345913cf20e02827bb32dd5b764fd5,
+                    "\ud83d\udeb2 Sustainable Mobility" : feature_group_c2d08db0c28f13287a3ac9d32876073f,
+                    "\u267b\ufe0f Circular Economy" : feature_group_3d541b427cf710cbb18208f5556a26d8,
+                    "\ud83e\udd57 Vegan/Sustainable Food" : feature_group_01e6c4b9fe126958316cc7515fbc623e,
+                    "\ud83d\uded2 Organic Grocery" : feature_group_d73b8051a2029e30f8debded1154fa15,
+                    "\ud83d\udcd6 Books for all" : feature_group_db9e7d0a60979911492166d72a06f165,
+                    "\ud83c\udf89 Events: May 31 - Jun 06 (This Week)" : feature_group_12d84b99b8280c1c308dbf22284ff355,
+                    "\ud83c\udf89 Events: Jun 07 - Jun 13" : feature_group_4f06be8f2e8177d66cda0ea0c10d30ca,
+                    "\ud83c\udf89 Events: Jun 14 - Jun 20" : feature_group_31905abef636ce9cad9c9d9e21f4f914,
+                    "\ud83c\udf89 Events: Jun 21 - Jun 30" : feature_group_21ef4d9690791584f7967aab39c1877d,
+                },
+            };
+            let layer_control_dde8d6f5f1773c998ccccc30ac1b8fea = L.control.layers(
+                layer_control_dde8d6f5f1773c998ccccc30ac1b8fea_layers.base_layers,
+                layer_control_dde8d6f5f1773c998ccccc30ac1b8fea_layers.overlays,
+                {
+  "position": "topright",
+  "collapsed": true,
+  "autoZIndex": true,
+}
+            ).addTo(map_473e2619f8fcd7428973500281544a1e);
+
+        
+</script>
+</html>
